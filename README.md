@@ -1,82 +1,102 @@
-# JSON Inspector 4.1
+# JSON Inspector 4.2
 
-![Version](https://img.shields.io/badge/version-4.1-548af7?style=flat-square)
+![Version](https://img.shields.io/badge/version-4.2-548af7?style=flat-square)
 ![HTML](https://img.shields.io/badge/HTML-single_file-e34f26?style=flat-square)
+![CSS](https://img.shields.io/badge/CSS-custom_styles-1572b6?style=flat-square)
 ![JavaScript](https://img.shields.io/badge/JavaScript-vanilla-f7df1e?style=flat-square)
+![Web Workers](https://img.shields.io/badge/Web_Workers-background_processing-8b5cf6?style=flat-square)
 ![Offline](https://img.shields.io/badge/offline-ready-6aab73?style=flat-square)
 ![Languages](https://img.shields.io/badge/interface-EN%20%7C%20RU-8b9ebd?style=flat-square)
 ![Dependencies](https://img.shields.io/badge/runtime_dependencies-0-6aab73?style=flat-square)
 
 [English](README.md) · [Русский](README.ru.md)
 
-A compact, local-first JSON inspector in a single HTML file. Explore trees and tables, inspect values, edit source, and compare JSON documents without a server, installation, or external libraries.
+A compact, local-first JSON inspector in one HTML file. Explore trees and tables, edit source, inspect exact values, and compare documents without installation, external libraries, or a server.
 
-Version 4.1 builds on the compact 3.0 interface, adding background parsing and comparison, configurable search, Unicode warnings, and exact numeric comparison.
+Built with HTML, CSS, and vanilla JavaScript. Web Workers handle parsing, formatting, and comparison. Python and Node.js are not part of the application and are not required to run it.
 
 The dark palette is inspired by developer tools such as IntelliJ IDEA. This is an independent project.
 
 ## Quick start
 
-1. Save `JSON-Inspector-4.1.html` to your computer.
+1. Save `JSON-Inspector-4.2.html` to your computer.
 2. Open it in a modern browser.
 3. Click Open, drop a JSON file into the window, or paste JSON into JSON Source and click Apply.
 4. Use Sample to explore the built-in document.
-5. To compare documents, apply the primary JSON, open JSON Diff, and load a second file.
+5. For comparison, apply the primary document, open JSON Diff, and load a second file.
 
-There is no build step. Node.js, Python, a package manager, and a local web server are not required to use the application.
+No build step, package manager, or local web server is needed. The application runs from a local `file://` page, subject to browser security settings.
 
-The application is designed to run from a local `file://` page. Background operations require Web Workers created from Blob URLs. If browser policy blocks Worker startup, the application displays an error instead of falling back to synchronous parsing. Local-file behavior still needs verification in your target browser.
+Background tasks require Blob-based Web Workers. If the browser blocks Worker startup, an error is displayed; there is no silent fallback to synchronous parsing.
+
+## What's new in 4.2
+
+- Explicit applied-document, draft, export-request, and stale-comparison states.
+- Independently cancellable parsing, formatting, and comparison tasks.
+- Revision checks to prevent background results from overwriting newer edits.
+- Cached comparison inputs for repeated comparisons.
+- Diff side swapping, refresh, change navigation, expandable values, and report export.
+- Separate node-change and descendant-change information.
+- Keyboard tree navigation and clickable ancestor breadcrumbs.
+- Pinnable, horizontally resizable inspector.
+- Collapsible search options, active-filter labels, hideable statistics, and a data-focus mode.
+- Error excerpts with editor navigation and a Unicode-warning list.
 
 ## Features
 
 | Area | Capabilities |
 | --- | --- |
-| Tree | Expand/collapse branches, select nodes, paginated rendering |
-| Tables | Records for arrays of objects; Paths for leaf values and empty containers |
-| Search | Keys, values, paths, one optional node-type filter, exact matching, case sensitivity |
-| Navigation | Next/previous search match, simple path resolution, parent navigation |
-| Inspector | Type, depth, direct-child count, canonical path, original JSON fragment |
+| Tree | Expand/collapse, exact-node selection, pagination, keyboard navigation |
+| Tables | Records for arrays of objects; Paths for leaves and empty containers |
+| Search | Keys, values, paths, type filter, exact match, case sensitivity, next/previous match |
+| Navigation | Dot/bracket paths, ancestors, parent navigation, reveal on the correct tree page |
+| Inspector | Type, depth, child count, line/column, path, original fragment, full-subtree copying |
 | Source | Editing, line numbers, highlighting, synchronized preview, formatting, minification |
-| JSON Diff | Added, Removed, Modified, Unchanged; status filter, search, pagination |
-| Numbers | Original numeric-token preservation; exact value or token comparison |
-| Unicode | Warnings for unpaired UTF-16 surrogates without silently changing source |
-| Background work | Parsing, formatting, and comparison in a Web Worker, with cancellation |
-| Statistics | UTF-8 size, nodes, properties, objects, arrays, strings, numbers, maximum depth |
-| Export | Copy source, copy path/subtree, download JSON |
-| Interface | Compact dark layout with English and Russian controls and diagnostics |
+| Diff | Added, Removed, Modified, Unchanged; filters, search, pagination, details, JSON report |
+| Numbers | Original tokens preserved; exact decimal-value or token comparison |
+| Unicode | Unpaired-surrogate warnings without silent repairs |
+| Export | Copy source/path/subtree and download JSON without editing the input file in place |
+| Interface | English/Russian controls and diagnostics; compact dark layout |
 
-## Interface language
+## Working with documents
 
-Click EN to switch to English or RU to switch to Russian. The button names the language you can switch to.
+### Draft, applied document, and export
 
-The initial language follows the browser: Russian for a Russian language setting, English otherwise. Switching languages does not translate or modify JSON keys, values, or file names. No language preference or document is written to browser storage.
+These are separate states:
 
-## Tree, tables, and inspector
+- The source editor holds the current draft.
+- Apply parses the draft and updates the tree, tables, inspector, and statistics.
+- Format and Minify change the draft but do not apply it automatically.
+- Copy copies the current source text, including an unapplied or invalid draft.
+- Download first applies and validates the current source, then requests a JSON download.
 
-- Click a tree value to open its inspector.
-- Use ↗ to open a container, or a value's parent, in the table.
-- Click table values to inspect individual nodes; use ↗ beside containers to drill into them.
-- Records combines object properties into columns. Missing properties appear as `—`; JSON `null` remains a value.
-- Paths lists leaf values and empty containers below the selected table root.
-- Parent navigates to the selected node's parent.
-- Copy Path copies the canonical path. Copy Subtree copies the complete original JSON fragment, including its original numeric tokens.
-- Long previews are truncated; copying still uses the complete value.
+Switching tabs or interface language does not replace the editor's draft with the applied document.
 
-Internal node selection and parent relationships use numeric indices, not display paths.
+A parsing error leaves the last applied document available. The state bar explains when the views differ from the draft. File replacement and page-close warnings help prevent accidental loss, subject to browser dialog behavior.
 
-## Search
+A download request does not prove that the browser saved the file. Verify the result. The original input file is never edited in place.
 
-Enable any combination of Keys, Values, and Paths. Enabled areas are combined with OR: a match in any area is sufficient. The optional type filter then restricts results to one node type.
+### Tree, tables, and inspector
 
-Exact match compares the query with an individual search area. Case sensitive preserves case during matching. Queries are literal, not regular expressions; case-insensitive matching is not full Unicode case folding.
+Click a tree value to inspect it. Use ↗ to open a container, or a value's parent, in a table. In tables, click values to inspect them and ↗ beside a container to drill into it.
 
-String values are searched in decoded form; numeric values use their original tokens. Booleans and null use their JSON text. For objects and arrays, value search uses the type name, not the serialized subtree.
+Records combines object properties into columns. Missing properties appear as `—`; JSON null remains a value. Paths lists leaves and empty containers below the selected table root.
 
-Use ↑ / ↓ to move between matches. Search runs in the main thread after a short input delay, not in the Worker.
+The inspector supports Parent, Copy Path, Copy Subtree, pinning, and horizontal resizing. Long previews are truncated; copying uses the complete original fragment. Breadcrumb buttons navigate to ancestors.
 
-## Paths
+Internal node relationships use numeric indices, not display paths.
 
-Supported forms include:
+## Search and paths
+
+Enable Keys, Values, Paths, or a combination. Enabled areas are combined with OR; the optional type filter restricts results to one type.
+
+Exact match compares an entire individual search field. Case sensitive preserves case distinctions. Search is literal, not regular-expression based; case-insensitive matching is not full Unicode case folding.
+
+Strings are searched decoded, numbers by original token, booleans/null by JSON text. Object/array value search uses the type name rather than serialized contents.
+
+Use ↑ / ↓ beside the search field to move between matches. Reset search clears the query and options. Search runs in the main thread with a short input delay.
+
+Supported paths:
 
 ```text
 $
@@ -85,49 +105,55 @@ $["users"][0]["name"]
 $["key.with.dot"]["hello world"]
 ```
 
-Canonical paths use JSON-quoted object keys. Dot syntax accepts identifier-like names; use double-quoted bracket syntax for punctuation, spaces, Unicode keys, and unusual names.
-
-This is not a full JSONPath engine. Wildcards, filters, recursive descent, slices, and executable expressions are not supported. Duplicate decoded keys are rejected, making canonical paths unambiguous within an applied document.
+Canonical paths quote object keys using JSON syntax. Use bracket notation for punctuation, spaces, Unicode, and unusual names. This is not a full JSONPath engine: wildcards, filters, recursive descent, slices, and executable expressions are unsupported.
 
 ## JSON Diff
 
-Diff compares the last successfully applied primary document with a separately loaded comparison document. Apply source edits before comparing them.
+Diff compares the last applied primary document with a separately loaded comparison document. Apply source edits before comparing them.
 
 | Status | Meaning |
 | --- | --- |
-| Added | Exists only in the comparison document |
-| Removed | Exists only in the primary document |
+| Added | Only in the comparison document |
+| Removed | Only in the primary document |
 | Modified | Type, value, or descendant content differs |
-| Unchanged | Equal under the selected comparison rules |
+| Unchanged | Equal under the selected rules |
 
-Changes propagate to ancestor containers. Summary counts include containers and refer to nodes, not independent editing operations.
+An ancestor becomes Modified when its descendants change. The interface separately identifies changed descendants. Counts refer to nodes, including containers, not independent editing operations.
 
 ### Comparison rules
 
-- Object properties are matched by decoded key; property order is ignored.
-- Arrays are matched by index. Moves and shifted elements are not recognized as separate operations.
+- Objects are matched by decoded key, ignoring property order.
+- Arrays are matched by index, without move or shift detection.
 - Strings are compared by decoded value, not escape spelling.
 - Formatting whitespace does not affect semantic equality.
 - Duplicate decoded keys are rejected in both documents.
 
-The comparison file remains loaded when the primary document is reapplied. Reopen the Diff view to rebuild the comparison.
+Exact numeric value mode normalizes decimal coefficients and BigInt exponents without conversion to JavaScript Number. Equivalent decimal/exponential representations compare equal. A separate option distinguishes negative and positive zero.
 
-Filter by status, use search, and browse pages. Click a displayed value to copy its original JSON fragment. Use ↗ beside a primary-document value to reveal it in the tree.
+Number lexeme mode compares original spelling, including notation and trailing zeros; signed-zero spelling remains distinct in this mode.
 
-### Number modes
+### Using Diff
 
-| Mode | Behavior |
-| --- | --- |
-| Exact numeric value | Normalizes decimal coefficients and exponents without JavaScript Number conversion |
-| Number lexeme | Compares original tokens, including notation and trailing zeros |
+- Load a second file and use Swap sides to exchange documents. Swapping replaces the primary editor content and prompts when necessary.
+- Refresh after applying a changed primary document or changing number-comparison settings. Stale results are not presented as current.
+- Use Only differences, the status filter, search, and pagination.
+- Move to the next/previous change.
+- Click a path to expand side-by-side fragments and descendant entries. Long fragments and descendant lists are capped for display.
+- Click a value to copy its full original fragment; use ↗ to reveal a primary node in the tree.
 
-Equivalent decimal and exponential representations compare equal in numeric-value mode. A separate option determines whether negative and positive zero are distinct in that mode. Lexeme mode always compares original spelling.
+### Report export
+
+Export report downloads JSON containing file names, comparison settings, counts, node statuses, original document texts, and node ranges. Ranges use zero-based UTF-16 offsets with exclusive ends.
+
+Each source document is included once; rows reference ranges instead of repeating whole subtrees. The report contains the full original documents: treat it as sensitive if the inputs are sensitive.
+
+The report includes all comparison rows, not just the currently filtered page. It describes the applied documents, not an unapplied draft. Exporting does not modify either input.
 
 ## Data integrity
 
-### Numeric-token preservation
+### Exact numeric tokens
 
-The parser retains numbers as text. Formatting, minification, and copying preserve tokens such as:
+Formatting, minification, and copying preserve values such as:
 
 ```json
 {
@@ -138,46 +164,47 @@ The parser retains numbers as text. Formatting, minification, and copying preser
 }
 ```
 
-Exact comparison uses string normalization and BigInt exponents, without expanding large exponents into decimal strings. Downstream tools may still be unable to represent these numbers accurately.
+Numbers are retained as text. Exact comparison does not expand large exponents into decimal strings. Downstream tools may still be unable to represent these values accurately.
 
-### Unicode and decoding
-
-Unpaired UTF-16 surrogates generate warnings; source data is not silently repaired or normalized. Warning details identify the beginning of the affected string token using zero-based UTF-16 offsets, not the exact location of every surrogate.
-
-Malformed escapes and unescaped control characters are parsing errors. File text is decoded as UTF-8; malformed byte sequences are not separately validated. A leading BOM is removed when opening either file.
-
-### Duplicate keys and invalid input
+### Invalid input and Unicode
 
 Duplicate decoded keys are rejected rather than overwritten: `"a"` and `"\u0061"` count as the same key. This is an intentional application policy.
 
-The parser accepts JSON, not JSON5 or JSON Lines. Comments, trailing commas, NaN, and Infinity are rejected. Diagnostics include line and column where available.
+The parser expects JSON, not JSON5 or JSON Lines. Comments, trailing commas, NaN, Infinity, malformed escapes, and unescaped control characters are rejected.
 
-A parse error preserves the last applied tree, tables, and statistics. The editor may contain a newer invalid draft.
+Unpaired UTF-16 surrogates produce warnings without repairing or normalizing the source. Warning entries identify the string token's start and an offset within the decoded string; they do not identify the exact source spelling of each surrogate. The warning list displays up to 100 entries.
 
-### Applying is not saving
+Files are decoded as UTF-8; malformed byte sequences are not separately validated. A leading BOM is removed when opening either file.
 
-Apply updates the views; it does not save a file. Replacement and page-close warnings help prevent accidental loss, subject to browser dialog behavior.
+Error diagnostics show a line excerpt and offer editor navigation when the error belongs to the current editor text.
 
-Download requests an export but cannot confirm that the browser completed it. Verify that the file was saved. The original input file is not edited in place.
+## Background work and performance
 
-## Background processing
+Parsing, formatting, and comparison have separate Worker services. Starting another task in the same service cancels its previous task; cancelling formatting does not automatically cancel comparison.
 
-Parsing, formatting/minification, and structural comparison run in a Web Worker. Only one computational request is active at a time; a new request cancels the previous one. Cancel stops the active operation.
+Worker services are reused. Comparison caches its active inputs; restarting that service clears its cache. Results are checked against document versions before use.
 
-Search, model transfer, selector preparation, highlighting, and DOM rendering still involve main-thread work. Background processing does not guarantee a completely non-blocking interface.
+Search, source highlighting, selectors, model transfer, report preparation, and DOM rendering still involve main-thread work. Background processing does not guarantee a completely non-blocking interface.
 
-## Keyboard controls
+## Keyboard and layout
 
 | Key | Action |
 | --- | --- |
-| Cmd + Enter / Ctrl + Enter in editor | Apply JSON |
+| Cmd + Enter / Ctrl + Enter in editor | Apply |
 | Tab in editor | Insert two spaces |
 | Enter in path field | Go to path |
-| Esc | Close inspector |
-| Left / Right on a view tab | Switch view tabs |
-| Home / End on a view tab | Select first / last view tab |
+| Up / Down in tree | Previous / next visible node |
+| Right in tree | Expand or move to first child |
+| Left in tree | Collapse or move to parent |
+| Home / End in tree | First / last visible node, across pages |
+| Enter / Space in tree | Open selected node's inspector |
+| Left / Right on view tab | Switch tabs |
+| Home / End on view tab | First / last tab |
+| Esc | Close inspector and exit data-focus mode |
 
-Clipboard access depends on browser permissions. If copying fails, select the source and use your normal copy shortcut.
+Search options and statistics can be collapsed or hidden. Data focus hides secondary panels; Show panels restores them.
+
+Clipboard behavior depends on browser permissions. If copying fails, select source text and use your normal copy shortcut.
 
 ## Limits
 
@@ -186,53 +213,57 @@ Clipboard access depends on browser permissions. If copying fails, select the so
 | Input / formatted output | 5 MiB |
 | Nodes per document | 100,000 |
 | Nesting depth | 150; root depth is 0 |
-| Combined canonical-path length | 8,388,608 UTF-16 code units |
+| Combined canonical paths | 8,388,608 UTF-16 code units |
 | Tree page | 250 nodes |
 | Table / Diff page | 100 rows |
-| Record-table property columns | 40, plus index |
+| Records property columns | 40, plus index |
 | Highlighted source | 200,000 UTF-16 code units |
-| Inspector preview | 100,000 UTF-16 code units; copying uses the full value |
+| Inspector preview | 100,000 UTF-16 code units; full-value copying |
 
-When record columns exceed the limit, use Paths to access omitted values. Highlighting and line numbers turn off for large source documents; editing remains available.
+Use Paths to access record properties omitted by the column limit. Source highlighting and line numbers turn off for large drafts; editing remains available.
 
-Limits reduce resource use but do not guarantee instant responses or a fixed memory ceiling. Performance depends on document shape, string and key lengths, device, and browser.
+Limits reduce resource use, not guarantee response time or a fixed memory ceiling.
 
 ## Privacy and security
 
-- Processing runs locally; the application makes no network requests and has no runtime dependencies.
-- Documents are not persisted in localStorage, IndexedDB, or cookies.
-- User-controlled values are inserted with text DOM operations rather than HTML interpolation.
-- Object lookup uses Map. Paths are not evaluated as code.
-- CSP blocks network connections, embedded objects, and frames. Inline scripts/styles and Blob Workers are allowed to keep the application self-contained.
-- Clipboard and download actions are initiated by the user.
+- Local processing, no application network requests or runtime dependencies.
+- No document persistence in localStorage, IndexedDB, or cookies.
+- User data is inserted through text DOM operations, not HTML interpolation.
+- Object lookup uses Map; paths are not executed as code.
+- CSP blocks network connections, embedded objects, and frames; inline scripts/styles and Blob Workers are allowed.
+- Clipboard, JSON download, and report export are user-initiated.
 
-Local processing does not protect against compromised browsers, extensions, operating systems, or modified HTML copies. Handle clipboard contents and exported files according to your requirements.
+Local processing does not protect against compromised browsers, extensions, operating systems, or modified HTML. Handle exported reports and clipboard contents according to your requirements.
 
-README badges are hosted by Shields.io. They are documentation assets; the HTML application does not load them.
+Shields.io badges belong to this documentation only; the HTML does not load them.
+
+## Language
+
+Click EN or RU to switch to the indicated language. The initial language follows the browser: Russian for a Russian setting, English otherwise. Switching does not change your JSON or file names. The preference is not persisted.
+
+## Validation
+
+During development, version 4.2 passed:
+
+- 161 computational-core checks using functions extracted from the generated HTML.
+- 30 automated browser checks in headless Chromium, including local-file Worker startup under CSP, draft retention, formatting, Diff, keyboard behavior, cancellation, pagination, and actual JSON/report downloads.
+- JavaScript syntax, DOM-identifier, and translation-key checks.
+
+No Node.js command or separate test file is required to use the application. These are development results, not a guarantee for modified copies.
+
+This is not comprehensive cross-browser or accessibility certification. Other browsers, screen readers, system clipboard integration, drag-and-drop behavior, and visual usability still need further manual testing. The narrow-viewport check does not constitute a full mobile usability audit.
 
 ## Repository files
 
-Suggested layout:
-
 ```text
 .
-├── JSON-Inspector-4.1.html
+├── JSON-Inspector-4.2.html
 ├── README.md
 ├── README.ru.md
 └── LICENSE
 ```
 
-Only the HTML file is required to run the application. No separate test script or development environment is required by this README.
-
-## Validation and compatibility
-
-During development, the computational core passed 40 automated checks covering numeric tokens, negative zero, exponents, paths, duplicate keys, Unicode, invalid input, exact comparison, ancestor changes, array comparison, and a document containing 10,000 values.
-
-JavaScript syntax and static DOM-identifier checks also passed. These are development checks, not a complete browser test or a guarantee that later edits remain correct. The test implementation used a separate copy of core functions rather than automatically extracting the current HTML code.
-
-A browser end-to-end run was not performed for this release. Visual rendering, Worker startup under the actual CSP, accessibility, focus, downloads, drag-and-drop, and system clipboard access still require manual browser testing.
-
-No cross-browser certification or claim of complete security is implied.
+Only the HTML is needed to run the application.
 
 ## License
 
