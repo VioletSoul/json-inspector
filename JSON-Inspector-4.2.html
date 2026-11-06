@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; worker-src blob:; style-src 'unsafe-inline'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'"><title>JSON Inspector 4.2</title><style>
+:root{color-scheme:dark;--bg:#1e1f22;--panel:#25262a;--line:#383b42;--text:#dfe1e5;--muted:#8d929e;--blue:#88adf1;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font:12px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}*{box-sizing:border-box}html,body{height:100%;margin:0}body{background:var(--bg);color:var(--text);overflow:hidden}button,input,select,textarea{font:inherit}button,input,select{color:var(--text);background:#2c2e33;border:1px solid var(--line);border-radius:5px;padding:4px 8px;min-height:26px}button{cursor:pointer}button:hover{background:#383c44}button:disabled{opacity:.35;cursor:default}input{background:#1e2025;min-width:0}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #548af7;outline-offset:1px}button.primary{background:#31588f;border-color:#436ba4}[hidden]{display:none!important}.app{height:100dvh;display:flex;flex-direction:column;min-width:340px}header{height:46px;flex:none;display:flex;align-items:center;gap:11px;padding:0 14px;background:var(--panel);border-bottom:1px solid var(--line)}.brand{display:flex;gap:8px;align-items:center;white-space:nowrap;font-weight:650;font-size:14px}.logo{font:600 16px var(--mono);color:#9dbbf0}.version{color:#8b9ebd;font-size:11px;font-weight:400;margin-left:3px}.local{color:#8db697;font-size:10px;white-space:nowrap}.push{flex:1}.file{color:var(--muted);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:22vw}.actions{display:flex;gap:5px}.search{display:flex;align-items:center;gap:4px;margin-left:auto}#search{width:215px}.muted{color:var(--muted)}.stats{display:flex;align-items:center;gap:16px;min-height:29px;padding:4px 14px;border-bottom:1px solid var(--line);font-size:10px;color:var(--muted);overflow:auto;white-space:nowrap;flex:none}.stats b{font:500 11px var(--mono);color:#cbd2df;margin-left:4px}.tabs{display:flex;align-items:center;gap:2px;padding:0 10px;border-bottom:1px solid var(--line);height:35px;flex:none}.tab{height:35px;border:0;border-bottom:2px solid transparent;border-radius:0;background:transparent;padding:5px 13px;color:var(--muted)}.tab[aria-selected=true]{border-bottom-color:#548af7;background:#282b31;color:var(--text)}#matches{font-size:10px;white-space:nowrap;min-width:12px}.panel{display:none;flex:1;min-height:0;flex-direction:column}.panel.active{display:flex}.bar{display:flex;align-items:center;gap:6px;min-height:36px;padding:4px 12px;border-bottom:1px solid #30333a;flex:none;flex-wrap:wrap}.bar button,.bar select,.bar input{font-size:11px;min-height:24px}.bar label{color:var(--muted);font-size:10px}.scroll{flex:1;min-height:0;overflow:auto}.page{font:10px var(--mono);color:var(--muted);white-space:nowrap}.path{width:230px;max-width:30vw}#node{max-width:45vw}.tree{padding:8px 10px;font:12px/1.7 var(--mono)}.row{display:flex;align-items:baseline;gap:5px;min-height:23px;width:max-content;min-width:100%;border-radius:3px}.row:hover{background:#292d34}.row.selected{background:#2d3b52}.twist{border:0;background:none;min-height:0;width:20px;padding:0;color:#909bad}.pick{border:0;background:transparent;min-height:0;padding:1px 0;font:inherit;text-align:left}.pick:hover{background:transparent}.key{color:#bdcbe0}.string{color:#83b77a}.number{color:#83a7cd}.boolean,.null{color:#cf997d}.jump{border:0;background:none;color:var(--blue);padding:0 4px;min-height:0}.clip{max-width:900px;overflow-wrap:anywhere}mark{background:#655020;color:#ffe6a4;border-radius:2px}table{width:100%;border-collapse:collapse;font:12px/1.6 var(--mono)}td,th{text-align:left;padding:7px 11px;border-bottom:1px solid #30333a;vertical-align:top;max-width:600px;overflow-wrap:anywhere}th{position:sticky;top:0;background:#292c32;color:#aebbd0;font-weight:500;font-size:11px}tbody tr:hover{background:#272b32}.cell{border:0;background:none;color:inherit;font:inherit;padding:0;min-height:0;white-space:normal;text-align:left}.cell:hover{background:none;text-decoration:underline}.sourcegrid{display:grid;grid-template-columns:1fr 1fr;flex:1;min-height:0}.editor{display:flex;flex-direction:column;min-height:0;min-width:0}.editor+.editor{border-left:1px solid var(--line)}.label{font-size:9px;letter-spacing:.06em;color:var(--muted);padding:4px 12px;background:#23252a}.editwrap{display:flex;flex:1;min-height:0}pre,textarea{font:12px/1.75 var(--mono);margin:0;padding:12px;background:var(--bg);color:var(--text);tab-size:2;white-space:pre;overflow:auto;border:0;border-radius:0;min-height:0;flex:1}textarea{resize:none;width:0;min-width:0}#gutter{flex:none;width:46px;text-align:right;padding-right:7px;color:#626977;background:#202226;overflow:hidden;user-select:none}footer{display:flex;gap:10px;align-items:center;justify-content:space-between;min-height:24px;padding:3px 12px;border-top:1px solid var(--line);color:var(--muted);font-size:10px;flex:none}#status{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#error{padding:7px 12px;background:#402b31;color:#ffb7b7;max-height:100px;overflow:auto;white-space:pre-wrap;font-size:11px;flex:none}.empty{color:var(--muted);padding:25px 14px;font:12px -apple-system,sans-serif}#inspector{position:fixed;right:12px;top:90px;bottom:36px;width:min(430px,94vw);display:flex;flex-direction:column;gap:10px;background:#252830;border:1px solid #4b586e;border-radius:8px;padding:12px;z-index:10;box-shadow:0 10px 40px #0009}#inspectPath{overflow-wrap:anywhere;font:11px var(--mono)}#inspectValue{white-space:pre-wrap;overflow-wrap:anywhere}#overlay{display:none;position:fixed;inset:8px;place-items:center;background:#203047ee;border:1px dashed #7aa5ed;border-radius:9px;font-size:18px;pointer-events:none;z-index:20}#toast{position:fixed;left:50%;bottom:35px;transform:translateX(-50%);background:#3b4a65;padding:8px 13px;border-radius:6px;z-index:30;max-width:85vw}#language{color:#a9c5f4;font:600 11px var(--mono)}@media(max-width:1050px){header{height:auto;min-height:46px;flex-wrap:wrap;padding:7px 10px;gap:7px}.local{display:none}#search{width:180px}.stats{gap:12px}}@media(max-width:680px){.file{display:none}.search{width:100%;margin:0}.search input{flex:1;width:0!important}.sourcegrid{grid-template-columns:1fr}.editor+.editor{display:none}.path{max-width:55vw}.stats{gap:10px}.footerNote{display:none}header{padding:6px 8px}.bar{padding:4px 7px}.brand{margin-right:auto}.actions button{font-size:11px}.page{font-size:9px}}
+
+#searchSettings,#warningsBox{flex:none;border-bottom:1px solid var(--line);max-height:150px;overflow:auto}summary{cursor:pointer;padding:5px 14px;color:var(--muted)}.bar label{display:inline-flex;align-items:center;gap:5px}.bar input[type=checkbox]{min-height:0}.chip{padding:2px 8px;border-radius:12px;background:#303e54;font-size:10px}#inspector{resize:horizontal;overflow:auto;min-width:280px;max-width:94vw;top:75px}#inspectValue{flex:1;min-height:0}#breadcrumbs{overflow:auto;flex-wrap:nowrap}#breadcrumbs button{white-space:nowrap}#errorContext{flex:none;max-height:130px;white-space:pre;overflow:auto;background:transparent;color:inherit;padding:6px 0}#error{max-height:220px}#diffNames,#diffSummary{white-space:normal}.row[role=treeitem]:focus-visible{outline:2px solid #548af7;outline-offset:-2px}.diff-added{background:#213829}.diff-removed{background:#3c252b}.diff-modified{background:#3a3423}.row.selected{box-shadow:inset 3px 0 #548af7}.diffDetails{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}.diffDetails pre{max-height:300px;white-space:pre-wrap;overflow-wrap:anywhere}.focus-mode header,.focus-mode .stats,.focus-mode #searchSettings,.focus-mode #filterChips,.focus-mode footer{display:none}.focus-mode #focusExit{display:block!important;position:fixed;right:12px;bottom:8px;z-index:40}#stateBar{color:var(--muted);font-size:11px}#warningsList{padding:0 12px 8px}#warningsList button{margin:3px}.scroll{scrollbar-gutter:stable}#diffBody tr:focus-visible{outline:2px solid #548af7}
+</style></head><body>
+<div class="app">
+<header><div class="brand"><span class="logo">{ }</span><span>JSON Inspector <span class="version">4.2</span></span></div><div class="actions"><button id="open" data-i18n="open"></button><button id="sample" data-i18n="sample"></button><button id="download" data-i18n="download"></button><button id="copyAll" data-i18n="copy"></button><input id="file" type="file" accept=".json,application/json,text/plain" hidden></div><span id="filename" class="file"></span><div class="search"><input id="search" type="search" data-placeholder="searchPlaceholder" data-aria="search" maxlength="256"><button id="hitPrev" data-aria="prevHit">↑</button><button id="hitNext" data-aria="nextHit">↓</button><span id="matches" class="muted" aria-live="polite"></span></div><span class="local" data-i18n="local"></span><button id="focusMode" data-i18n="focusMode"></button><button id="toggleStats" data-i18n="statistics"></button><button id="language"></button></header>
+<div class="bar" id="stateBar" role="status" aria-live="polite"><span id="stateText"></span><span class="push"></span><button id="cancelParse" data-i18n="cancelParse" hidden></button><button id="cancelFormat" data-i18n="cancelFormat" hidden></button><button id="cancelDiff" data-i18n="cancelDiff" hidden></button></div><details id="searchSettings"><summary data-i18n="searchSettings"></summary><div class="bar"><label><input id="sKeys" type="checkbox" checked><span data-i18n="inKeys"></span></label><label><input id="sValues" type="checkbox" checked><span data-i18n="inValues"></span></label><label><input id="sPaths" type="checkbox" checked><span data-i18n="inPaths"></span></label><select id="sType" data-aria="searchType"><option value="" data-i18n="allTypes"></option><option value="number" data-i18n="numberType"></option><option value="string" data-i18n="stringType"></option><option value="boolean" data-i18n="booleanType"></option><option value="null" data-i18n="nullType"></option><option value="object" data-i18n="objectType"></option><option value="array" data-i18n="arrayType"></option></select><label><input id="sExact" type="checkbox"><span data-i18n="exactMatch"></span></label><label><input id="sCase" type="checkbox"><span data-i18n="caseSensitive"></span></label><button id="clearSearch" data-i18n="clearSearch"></button></div></details><div id="filterChips" class="bar" hidden></div><details id="warningsBox" hidden><summary id="warningsTitle"></summary><div id="warningsList"></div></details><div class="stats" data-aria="statistics"><span><span data-i18n="bytes"></span><b id="bytes">—</b></span><span><span data-i18n="nodes"></span><b id="nodes">—</b></span><span><span data-i18n="keys"></span><b id="keys">—</b></span><span><span data-i18n="objects"></span><b id="objects">—</b></span><span><span data-i18n="arrays"></span><b id="arrays">—</b></span><span><span data-i18n="strings"></span><b id="strings">—</b></span><span><span data-i18n="numbers"></span><b id="numbers">—</b></span><span><span data-i18n="depth"></span><b id="depth">—</b></span></div>
+<nav class="tabs" role="tablist" data-aria="view"><button class="tab" id="tab-tree" role="tab" aria-selected="true" aria-controls="treePanel" data-panel="treePanel" data-i18n="treeView"></button><button class="tab" id="tab-table" role="tab" aria-selected="false" aria-controls="tablePanel" data-panel="tablePanel" data-i18n="tableView"></button><button class="tab" id="tab-source" role="tab" aria-selected="false" aria-controls="sourcePanel" data-panel="sourcePanel" data-i18n="sourceView"></button><button class="tab" id="tab-diff" role="tab" aria-selected="false" aria-controls="diffPanel" data-panel="diffPanel" data-i18n="diffView"></button></nav>
+<div id="error" role="alert" hidden><div id="errorMessage"></div><pre id="errorContext"></pre><button id="errorGo" data-i18n="errorGo"></button></div>
+<section id="treePanel" class="panel active" role="tabpanel" aria-labelledby="tab-tree"><div class="bar"><button id="expand" data-i18n="expand"></button><button id="collapse" data-i18n="collapse"></button><label for="path" data-i18n="path"></label><input id="path" class="path" placeholder="$.users[0].name" data-aria="path"><button id="go" data-i18n="go"></button><button id="copyPath" data-i18n="copyPath"></button><span class="push"></span><button id="treePrev" data-aria="prevTree">‹</button><span id="treePage" class="page"></span><button id="treeNext" data-aria="nextTree">›</button></div><div id="breadcrumbs" class="bar" data-aria="breadcrumbs"></div><div id="tree" class="scroll tree" role="tree" data-aria="treeView"></div></section>
+<section id="tablePanel" class="panel" role="tabpanel" aria-labelledby="tab-table"><div class="bar"><select id="mode" data-aria="tableMode"><option value="records" data-i18n="records"></option><option value="paths" data-i18n="paths"></option></select><select id="node" data-aria="tableNode"></select><span id="tableInfo" class="page"></span><span class="push"></span><button id="tablePrev" data-aria="prevTable">‹</button><span id="tablePage" class="page"></span><button id="tableNext" data-aria="nextTable">›</button></div><div id="table" class="scroll"></div></section>
+<section id="sourcePanel" class="panel" role="tabpanel" aria-labelledby="tab-source"><div class="bar"><button id="apply" class="primary" data-i18n="apply"></button><button id="format" data-i18n="format"></button><button id="minify" data-i18n="minify"></button><span class="push"></span><span id="cursor" class="page"></span><span class="page">⌘ / Ctrl + Enter</span></div><div class="sourcegrid"><div class="editor"><div class="label" data-i18n="editor"></div><div class="editwrap"><pre id="gutter" aria-hidden="true">1</pre><textarea id="source" data-aria="editor" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></div></div><div class="editor"><div class="label" data-i18n="highlight"></div><pre id="highlight" data-aria="preview"></pre></div></div></section>
+<section id="diffPanel" class="panel" role="tabpanel" aria-labelledby="tab-diff"><div class="bar"><button id="compareFile" data-i18n="compareFile"></button><input id="file2" type="file" accept=".json,application/json,text/plain" hidden><button id="swapDocs" data-i18n="swapDocs"></button><button id="recompare" data-i18n="recompare"></button><select id="numberMode" data-aria="numberMode"><option value="value" data-i18n="numericValue"></option><option value="lexeme" data-i18n="numericLexeme"></option></select><label><input id="signedZero" type="checkbox" checked><span data-i18n="signedZero"></span></label><select id="diffFilter" data-aria="diffFilter"><option value="" data-i18n="allStatuses"></option><option value="added" data-i18n="added"></option><option value="removed" data-i18n="removed"></option><option value="modified" data-i18n="modified"></option><option value="unchanged" data-i18n="unchanged"></option></select><label><input id="onlyDiff" type="checkbox" checked><span data-i18n="onlyDiff"></span></label><button id="prevChange" data-i18n="prevChange"></button><button id="nextChange" data-i18n="nextChange"></button><button id="exportDiff" data-i18n="exportDiff"></button></div><div class="bar"><span id="diffNames" class="page"></span><span id="diffSummary" class="page"></span><span class="push"></span><button id="diffPrev" data-aria="prevTable">‹</button><span id="diffPage" class="page"></span><button id="diffNext" data-aria="nextTable">›</button></div><div id="diffBody" class="scroll"></div></section><footer><span id="status" role="status"></span><span class="footerNote" data-i18n="footer"></span></footer>
+</div>
+<aside id="inspector" role="dialog" data-aria="inspector" aria-modal="false" hidden><div class="bar"><span data-i18n="inspector"></span><button id="pinInspector" aria-pressed="false" data-i18n="pinInspector"></button><span class="push"></span><button id="closeInspector" data-aria="closeInspector">✕</button></div><div id="inspectPath"></div><div id="inspectMeta" class="muted"></div><div class="bar"><button id="parentNode" data-i18n="parentNode"></button><button id="inspectPathCopy" data-i18n="copyPath"></button><button id="copyValue" data-i18n="copySubtree"></button></div><pre id="inspectValue"></pre></aside><div id="overlay" data-i18n="drop"></div><div id="toast" role="status" hidden></div>
+<button id="focusExit" data-i18n="exitFocus" hidden></button>
+<script>
+'use strict';
+const I18N = {
+  "ru": {
+    "open": "Открыть",
+    "sample": "Пример",
+    "download": "Скачать",
+    "copy": "Копировать",
+    "searchPlaceholder": "Ключ, значение, путь…",
+    "search": "Поиск",
+    "prevHit": "Предыдущее совпадение",
+    "nextHit": "Следующее совпадение",
+    "local": "● Локально",
+    "statistics": "Статистика",
+    "view": "Представление",
+    "treeView": "Дерево",
+    "tableView": "Таблица",
+    "sourceView": "Исходник JSON",
+    "expand": "Развернуть всё",
+    "collapse": "Свернуть всё",
+    "path": "Путь",
+    "go": "Перейти",
+    "copyPath": "Копировать путь",
+    "prevTree": "Предыдущая страница дерева",
+    "nextTree": "Следующая страница дерева",
+    "tableMode": "Режим таблицы",
+    "records": "Записи",
+    "paths": "Пути",
+    "tableNode": "Контейнер таблицы",
+    "prevTable": "Предыдущая страница таблицы",
+    "nextTable": "Следующая страница таблицы",
+    "apply": "Применить",
+    "format": "Форматировать",
+    "minify": "Минифицировать",
+    "editor": "РЕДАКТОР",
+    "highlight": "ПОДСВЕТКА",
+    "preview": "Предпросмотр JSON",
+    "footer": "UTF-8 · Точные числа · Без сетевых запросов",
+    "inspector": "Инспектор значения",
+    "closeInspector": "Закрыть инспектор",
+    "copyValue": "Копировать полное значение",
+    "drop": "Отпустите JSON-файл",
+    "bytes": "UTF-8",
+    "nodes": "Узлы",
+    "keys": "Свойства",
+    "objects": "Объекты",
+    "arrays": "Массивы",
+    "strings": "Строки",
+    "numbers": "Числа",
+    "depth": "Глубина",
+    "noFile": "Нет файла",
+    "ready": "Готово",
+    "empty": "Откройте JSON, перетащите файл в окно или вставьте текст в исходник.",
+    "noMatches": "Совпадений нет.",
+    "toggle": "Раскрыть или свернуть: {key}",
+    "openTable": "Открыть узел в таблице",
+    "children": "Дочерних узлов",
+    "inspectMeta": "{type} · Глубина {depth} · Дочерних узлов {count}",
+    "truncated": "… Предпросмотр обрезан; копирование сохраняет полное значение.",
+    "noRows": "Нет строк. Пустые контейнеры доступны в режиме «Пути».",
+    "colKey": "Ключ / индекс",
+    "colType": "Тип",
+    "colValue": "Значение",
+    "rowCount": "{count} строк",
+    "columnLimit": " · {shown}/{total} колонок; все значения — в «Пути»",
+    "openContainer": "Открыть контейнер",
+    "applied": "{name} · JSON применён",
+    "unexported": " · Не экспортирован",
+    "replace": "Текст ещё не экспортирован. Заменить его?",
+    "reading": "Чтение файла…",
+    "changedWhileReading": "Редактор изменился во время чтения. Заменить текст?",
+    "readError": "Не удалось прочитать файл",
+    "largePreview": "Подсветка и номера строк отключены для большого документа.",
+    "edited": "Есть изменения · Примените JSON для обновления представлений",
+    "copied": "Скопировано",
+    "copyFailed": "Буфер недоступен. Выделите исходник и нажмите ⌘ / Ctrl + C",
+    "openFirst": "Сначала откройте JSON",
+    "exportRequested": "Экспорт запрошен · Проверьте сохранение файла в браузере",
+    "exportToast": "JSON передан браузеру для скачивания",
+    "notFound": "Путь не найден. Поддерживаются $.name и $[\"name\"], без фильтров.",
+    "errorStatus": "Ошибка · Представления сохраняют последнюю применённую версию",
+    "byteLimit": "Лимит документа: 5 МиБ",
+    "formattedLimit": "Форматированный текст превышает 5 МиБ",
+    "fileLimit": "Файл превышает 5 МиБ",
+    "depthLimit": "Лимит глубины: {limit}",
+    "nodeLimit": "Лимит узлов: {limit}",
+    "pathLimit": "Превышен бюджет длины путей",
+    "invalidString": "Некорректная строка",
+    "controlCharacter": "Управляющий символ в строке",
+    "unfinishedString": "Незавершённая строка",
+    "expectedKey": "Ожидался ключ в двойных кавычках",
+    "duplicateKey": "Повторяющийся ключ {key}",
+    "expectedColon": "Ожидалось двоеточие",
+    "expectedSeparator": "Ожидалась запятая или {close}",
+    "expectedValue": "Ожидалось JSON-значение",
+    "trailing": "Лишние символы после JSON",
+    "location": "{message} · строка {line}, столбец {column}",
+    "unexpected": "Не удалось выполнить операцию",
+    "switchLanguage": "Switch interface to English",
+    "numberType": "число",
+    "stringType": "строка",
+    "booleanType": "логическое",
+    "nullType": "null",
+    "objectType": "объект",
+    "arrayType": "массив",
+    "byteUnit": "Б"
+  },
+  "en": {
+    "open": "Open",
+    "sample": "Sample",
+    "download": "Download",
+    "copy": "Copy",
+    "searchPlaceholder": "Key, value, path…",
+    "search": "Search",
+    "prevHit": "Previous match",
+    "nextHit": "Next match",
+    "local": "● Local",
+    "statistics": "Statistics",
+    "view": "View",
+    "treeView": "Tree View",
+    "tableView": "Table View",
+    "sourceView": "JSON Source",
+    "expand": "Expand all",
+    "collapse": "Collapse all",
+    "path": "Path",
+    "go": "Go",
+    "copyPath": "Copy path",
+    "prevTree": "Previous tree page",
+    "nextTree": "Next tree page",
+    "tableMode": "Table mode",
+    "records": "Records",
+    "paths": "Paths",
+    "tableNode": "Table container",
+    "prevTable": "Previous table page",
+    "nextTable": "Next table page",
+    "apply": "Apply",
+    "format": "Format",
+    "minify": "Minify",
+    "editor": "EDITOR",
+    "highlight": "SYNTAX HIGHLIGHT",
+    "preview": "JSON preview",
+    "footer": "UTF-8 · Exact numbers · No network requests",
+    "inspector": "Value Inspector",
+    "closeInspector": "Close inspector",
+    "copyValue": "Copy full value",
+    "drop": "Drop your JSON file",
+    "bytes": "UTF-8",
+    "nodes": "Nodes",
+    "keys": "Properties",
+    "objects": "Objects",
+    "arrays": "Arrays",
+    "strings": "Strings",
+    "numbers": "Numbers",
+    "depth": "Depth",
+    "noFile": "No file",
+    "ready": "Ready",
+    "empty": "Open JSON, drop a file here, or paste text into JSON Source.",
+    "noMatches": "No matches.",
+    "toggle": "Expand or collapse: {key}",
+    "openTable": "Open node in table",
+    "children": "Children",
+    "inspectMeta": "{type} · Depth {depth} · Children {count}",
+    "truncated": "… Preview truncated; copying preserves the complete value.",
+    "noRows": "No rows. Empty containers are available in Paths mode.",
+    "colKey": "Key / index",
+    "colType": "Type",
+    "colValue": "Value",
+    "rowCount": "{count} rows",
+    "columnLimit": " · {shown}/{total} columns; all values are available in Paths",
+    "openContainer": "Open container",
+    "applied": "{name} · JSON applied",
+    "unexported": " · Not exported",
+    "replace": "The current text has not been exported. Replace it?",
+    "reading": "Reading file…",
+    "changedWhileReading": "The editor changed while reading. Replace its contents?",
+    "readError": "Could not read the file",
+    "largePreview": "Highlighting and line numbers are disabled for large documents.",
+    "edited": "Changes pending · Apply JSON to update the views",
+    "copied": "Copied",
+    "copyFailed": "Clipboard unavailable. Select the source and press ⌘ / Ctrl + C",
+    "openFirst": "Open JSON first",
+    "exportRequested": "Export requested · Check that your browser saved the file",
+    "exportToast": "JSON handed to the browser for download",
+    "notFound": "Path not found. Supports $.name and $[\"name\"], without filters.",
+    "errorStatus": "Error · Views retain the last applied version",
+    "byteLimit": "Document limit: 5 MiB",
+    "formattedLimit": "Formatted text exceeds 5 MiB",
+    "fileLimit": "File exceeds 5 MiB",
+    "depthLimit": "Depth limit: {limit}",
+    "nodeLimit": "Node limit: {limit}",
+    "pathLimit": "Total path-length budget exceeded",
+    "invalidString": "Invalid string",
+    "controlCharacter": "Control character in string",
+    "unfinishedString": "Unterminated string",
+    "expectedKey": "Expected a double-quoted key",
+    "duplicateKey": "Duplicate key {key}",
+    "expectedColon": "Expected a colon",
+    "expectedSeparator": "Expected a comma or {close}",
+    "expectedValue": "Expected a JSON value",
+    "trailing": "Unexpected characters after JSON",
+    "location": "{message} · line {line}, column {column}",
+    "unexpected": "Operation failed",
+    "switchLanguage": "Переключить интерфейс на русский",
+    "numberType": "number",
+    "stringType": "string",
+    "booleanType": "boolean",
+    "nullType": "null",
+    "objectType": "object",
+    "arrayType": "array",
+    "byteUnit": "B"
+  }
+};
+
+Object.assign(I18N.ru,{"focusMode": "Только данные", "exitFocus": "Вернуть панели", "cancelParse": "Отменить разбор", "cancelFormat": "Отменить форматирование", "cancelDiff": "Отменить сравнение", "searchSettings": "Параметры поиска", "inKeys": "Ключи", "inValues": "Значения", "inPaths": "Пути", "searchType": "Тип узла", "allTypes": "Все типы", "exactMatch": "Точное совпадение", "caseSensitive": "Учитывать регистр", "clearSearch": "Сбросить поиск", "errorGo": "Перейти к ошибке", "breadcrumbs": "Родительские узлы", "diffView": "JSON Diff", "compareFile": "Открыть второй JSON", "swapDocs": "Поменять стороны", "recompare": "Обновить сравнение", "numberMode": "Режим сравнения чисел", "numericValue": "Точное значение числа", "numericLexeme": "Исходная запись числа", "signedZero": "Различать −0 и 0", "diffFilter": "Статус изменения", "allStatuses": "Все статусы", "added": "Добавлено", "removed": "Удалено", "modified": "Изменено", "unchanged": "Без изменений", "onlyDiff": "Только различия", "prevChange": "Предыдущее изменение", "nextChange": "Следующее изменение", "exportDiff": "Экспорт отчёта", "pinInspector": "Закрепить", "parentNode": "К родителю", "copySubtree": "Копировать поддерево", "inside": "Изменения внутри", "ownChange": "Изменение узла", "primary": "Основной", "comparison": "Второй", "diffEmpty": "Примените основной JSON и откройте второй файл. Массивы сравниваются по индексам.", "diffStale": "Сравнение устарело — обновите его.", "draftState": "Черновик изменён; представления показывают последнюю применённую версию.", "appliedState": "JSON применён.", "noDoc": "Документ не применён.", "unsavedState": "Экспорт текущего текста не запрошен.", "busyParse": "Разбор…", "busyFormat": "Форматирование…", "busyDiff": "Сравнение…", "cancelled": "Операция отменена", "stale": "Документ изменился во время обработки. Повторите операцию.", "workerUnavailable": "Не удалось запустить Worker. Проверьте настройки браузера.", "warnings": "Предупреждения Unicode: {count}. Данные сохранены без исправлений.", "warningAt": "Начало строкового токена: {line}:{column}; смещение в декодированной строке UTF-16: {offset}", "noResults": "Нет результатов", "reportNote": "Счётчики считают узлы, включая контейнеры; массивы сопоставлены по индексам.", "copySide": "Копировать значение", "expandDiff": "Показать значения и потомков", "loadedOther": "Второй документ загружен", "changedWhileOperation": "Есть неприменённый черновик. Продолжить с последней применённой версией?"});
+Object.assign(I18N.en,{"focusMode": "Data focus", "exitFocus": "Show panels", "cancelParse": "Cancel parsing", "cancelFormat": "Cancel formatting", "cancelDiff": "Cancel comparison", "searchSettings": "Search options", "inKeys": "Keys", "inValues": "Values", "inPaths": "Paths", "searchType": "Node type", "allTypes": "All types", "exactMatch": "Exact match", "caseSensitive": "Case sensitive", "clearSearch": "Reset search", "errorGo": "Go to error", "breadcrumbs": "Ancestors", "diffView": "JSON Diff", "compareFile": "Open comparison JSON", "swapDocs": "Swap sides", "recompare": "Refresh comparison", "numberMode": "Number comparison", "numericValue": "Exact numeric value", "numericLexeme": "Number lexeme", "signedZero": "Distinguish −0 and 0", "diffFilter": "Change status", "allStatuses": "All statuses", "added": "Added", "removed": "Removed", "modified": "Modified", "unchanged": "Unchanged", "onlyDiff": "Only differences", "prevChange": "Previous change", "nextChange": "Next change", "exportDiff": "Export report", "pinInspector": "Pin", "parentNode": "Parent", "copySubtree": "Copy subtree", "inside": "Changed descendants", "ownChange": "Node change", "primary": "Primary", "comparison": "Comparison", "diffEmpty": "Apply primary JSON and open a comparison file. Arrays are matched by index.", "diffStale": "Comparison is stale — refresh it.", "draftState": "Draft changed; views show the last applied version.", "appliedState": "JSON applied.", "noDoc": "No document applied.", "unsavedState": "Export of current text has not been requested.", "busyParse": "Parsing…", "busyFormat": "Formatting…", "busyDiff": "Comparing…", "cancelled": "Operation cancelled", "stale": "Document changed during processing. Repeat the operation.", "workerUnavailable": "Cannot start Worker. Check browser settings.", "warnings": "Unicode warnings: {count}. Data preserved without repairs.", "warningAt": "String token starts at {line}:{column}; decoded UTF-16 offset: {offset}", "noResults": "No results", "reportNote": "Counts refer to nodes including containers; arrays are matched by index.", "copySide": "Copy value", "expandDiff": "Show values and descendants", "loadedOther": "Comparison document loaded", "changedWhileOperation": "There is an unapplied draft. Continue with the last applied version?"});
+
+let lang=navigator.language?.toLowerCase().startsWith('ru')?'ru':'en';
+function t(k,a={}){return (I18N[lang][k]??k).replace(/\{(\w+)\}/g,(_,x)=>String(a[x]??''));}
+function fmt(n){return Number(n).toLocaleString(lang==='ru'?'ru-RU':'en-US');}
+// CORE-BEGIN
+class AppError extends Error{constructor(key,args={},position=null,line=null,column=null){super(key);this.key=key;this.args=args;this.position=position;this.line=line;this.column=column}localized(){const message=t(this.key,this.args);return this.line===null?message:t('location',{message,line:this.line,column:this.column})}}
+const LIMITS=Object.freeze({bytes:5*1024*1024,nodes:100000,depth:150,pathChars:8*1024*1024,treePage:250,tablePage:100,columns:40,highlight:200000});
+// Exact numeric lexemes; untrusted keys are held in Map, not assigned to objects.
+function parseDocument(text){
+ let pos=0,pathChars=0;const records=[],warnings=[];
+ function fail(key,args={},at=pos){const before=text.slice(0,at);throw new AppError(key,args,at,before.split('\n').length,at-before.lastIndexOf('\n'))}
+ function ws(){while(pos<text.length&&/[\x20\t\r\n]/.test(text[pos]))pos++}
+ function string(){const start=pos++;while(pos<text.length){const c=text[pos++];if(c==='"'){const raw=text.slice(start,pos);try{const value=JSON.parse(raw);for(let i=0;i<value.length;i++){const c=value.charCodeAt(i);if(c>=0xD800&&c<=0xDBFF){const n=value.charCodeAt(i+1);if(n>=0xDC00&&n<=0xDFFF)i++;else warnings.push({position:start,offset:i});}else if(c>=0xDC00&&c<=0xDFFF)warnings.push({position:start,offset:i});}return{raw,value}}catch{fail('invalidString',{},start)}}if(c==='\\'){const at=pos,escape=text[pos++];if(escape==='u'){for(let j=0;j<4;j++)if(!/[0-9a-fA-F]/.test(text[pos+j]||'!'))fail('invalidString',{},Math.min(pos+j,text.length));pos+=4;}else if(!['"','\\','/','b','f','n','r','t'].includes(escape))fail('invalidString',{},Math.min(at,text.length));}else if(c.charCodeAt(0)<32)fail('controlCharacter',{},pos-1)}fail('unfinishedString',{},start)}
+ function read(parent,key,path,depth,keyRaw=null){
+  ws();if(depth>LIMITS.depth)fail('depthLimit',{limit:LIMITS.depth});if(records.length>=LIMITS.nodes)fail('nodeLimit',{limit:LIMITS.nodes});pathChars+=path.length;if(pathChars>LIMITS.pathChars)fail('pathLimit');
+  const r={index:records.length,parent,key,path,depth,keyRaw,siblingIndex:parent===null?0:records[parent].children.length,start:pos,end:0,type:'',value:null,children:[],lookup:new Map()};records.push(r);const c=text[pos];
+  if(c==='{'||c==='['){r.type=c==='{'?'object':'array';pos++;ws();const close=c==='{'?'}':']';if(text[pos]===close)pos++;else while(true){ws();let k,kr=null;if(r.type==='object'){if(text[pos]!=='"')fail('expectedKey');const token=string();k=token.value;kr=token.raw;ws();if(r.lookup.has(k))fail('duplicateKey',{key:JSON.stringify(k).slice(0,100)});if(text[pos++]!==':')fail('expectedColon',{},pos-1)}else k=String(r.children.length);const child=read(r.index,k,path+(r.type==='array'?`[${k}]`:`[${JSON.stringify(k)}]`),depth+1,kr);r.children.push(child.index);r.lookup.set(k,child.index);ws();if(text[pos]===close){pos++;break}if(text[pos++]!==',')fail('expectedSeparator',{close},pos-1)}}
+  else if(c==='"'){const s=string();r.type='string';r.value=s.value}
+  else if(c==='t'&&text.startsWith('true',pos)){r.type='boolean';r.value=true;pos+=4}
+  else if(c==='f'&&text.startsWith('false',pos)){r.type='boolean';r.value=false;pos+=5}
+  else if(c==='n'&&text.startsWith('null',pos)){r.type='null';pos+=4}
+  else{const re=/-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?/y;re.lastIndex=pos;const m=re.exec(text);if(!m)fail('expectedValue');r.type='number';r.value=m[0];pos=re.lastIndex}
+  r.end=pos;r.last=records.length-1;return r;
+ }
+ ws();read(null,'$','$',0);ws();if(pos!==text.length)fail('trailing');const lines=[0];for(let i=0;i<text.length;i++)if(text[i]==='\n')lines.push(i+1);return{text,records,warnings,lines,byPath:new Map(records.map(r=>[r.path,r.index]))};
+}
+function serializeDocument(doc,indent){const parts=[],stack=[{id:0}];while(stack.length){const task=stack.pop();if(task.text!==undefined){parts.push(task.text);continue}const r=doc.records[task.id];if(!r.children.length){parts.push(r.type==='object'?'{}':r.type==='array'?'[]':doc.text.slice(r.start,r.end));continue}const obj=r.type==='object';parts.push(obj?'{':'[',indent?'\n':'');stack.push({text:(indent?'\n'+' '.repeat(r.depth*indent):'')+(obj?'}':']')});for(let i=r.children.length-1;i>=0;i--){const c=doc.records[r.children[i]];if(i<r.children.length-1)stack.push({text:','+(indent?'\n':'')});stack.push({id:c.index});stack.push({text:(indent?' '.repeat((r.depth+1)*indent):'')+(obj?c.keyRaw+':'+(indent?' ':''):'')})}}return parts.join('')}
+function resolvePath(doc,input){if(doc.byPath.has(input))return doc.byPath.get(input);if(input[0]!=='$')return null;let i=1,id=0;while(i<input.length){let key;if(input[i]==='.'){const m=/^[A-Za-z_$][\w$]*/.exec(input.slice(++i));if(!m)return null;key=m[0];i+=key.length}else if(input[i]==='['){i++;if(input[i]==='"'){const start=i++;let done=false;while(i<input.length){if(input[i]==='\\'){i+=2;continue}if(input[i++]==='"'){done=true;break}}if(!done)return null;try{key=JSON.parse(input.slice(start,i))}catch{return null}}else{const m=/^(?:0|[1-9]\d*)/.exec(input.slice(i));if(!m)return null;key=m[0];i+=key.length}if(input[i++]!==']')return null}else return null;const r=doc.records[id];if(!r.lookup.has(key))return null;id=r.lookup.get(key)}return id}
+
+function normalizeNumber(raw,signedZero=true){const m=/^(-?)(\d+)(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/.exec(raw);let digits=(m[2]+(m[3]||'')).replace(/^0+/,'');if(!digits)return signedZero&&m[1]?'-0':'0';let exp=BigInt(m[4]||'0')-BigInt((m[3]||'').length);const z=/0+$/.exec(digits);if(z){digits=digits.slice(0,-z[0].length);exp+=BigInt(z[0].length);}return m[1]+digits+'e'+exp;}
+function compareDocuments(a,b,mode='value',signedZero=true){const rows=[],byPath=new Map();for(const path of new Set([...a.byPath.keys(),...b.byPath.keys()])){const ai=a.byPath.get(path),bi=b.byPath.get(path),x=a.records[ai],y=b.records[bi];let own=!x?'added':!y?'removed':x.type!==y.type?'modified':'unchanged';if(x&&y&&own==='unchanged'&&x.type!=='object'&&x.type!=='array'){const equal=x.type==='number'?(mode==='lexeme'?x.value===y.value:normalizeNumber(x.value,signedZero)===normalizeNumber(y.value,signedZero)):x.value===y.value;own=equal?'unchanged':'modified';}const row={path,ai,bi,own,state:own,inside:false};rows.push(row);byPath.set(path,row);}
+ const ordered=[...rows].sort((x,y)=>(a.records[y.ai]?.depth??b.records[y.bi].depth)-(a.records[x.ai]?.depth??b.records[x.bi].depth));for(const row of ordered){if(row.state==='unchanged')continue;for(const [d,id]of [[a,row.ai],[b,row.bi]]){const r=d.records[id];if(!r||r.parent===null)continue;const p=byPath.get(d.records[r.parent].path);p.inside=true;if(p.state==='unchanged')p.state='modified';}}return rows;}
+function matchesRecord(doc,r,o){if(o.type&&r.type!==o.type)return false;if(!o.q)return true;const fields=[];if(o.keys)fields.push(r.key);if(o.paths)fields.push(r.path);if(o.values)fields.push(r.type==='object'||r.type==='array'?r.type:r.type==='null'?'null':String(r.value));const q=o.case?o.q:o.q.toLowerCase();return fields.some(x=>{x=String(x);if(!o.case)x=x.toLowerCase();return o.exact?x===q:x.includes(q);});}
+function lineLocation(lines,position){let lo=0,hi=lines.length;while(lo+1<hi){const mid=(lo+hi)>>1;if(lines[mid]<=position)lo=mid;else hi=mid;}return{line:lo+1,column:position-lines[lo]+1};}
+
+// CORE-END
+
+const $=id=>document.getElementById(id),enc=new TextEncoder(),group=r=>r.type==='object'||r.type==='array';
+const S={doc:null,name:'document.json',key:0,exported:'',revision:0,load:0,selected:0,root:0,expanded:new Set(),visible:[],hits:[],hit:-1,tp:0,rp:0,tab:'treePanel',error:null,errorSource:'',pinned:false,searchSaved:null,searching:false};
+const D={doc:null,name:'',key:0,load:0,rows:[],stamp:'',page:0,selected:null,open:new Set()};
+const jobs=new Map();let sequence=0,toastTimer,searchTimer,editTimer;
+function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=String(text);return e;}
+function notify(k,a={}){$('toast').textContent=t(k,a);$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,3000);}
+function draft(){return !!S.doc&&$('source').value!==S.doc.text;}
+function pending(){return $('source').value!==S.exported;}
+function state(){const parts=[S.name,t(S.doc?(draft()?'draftState':'appliedState'):'noDoc')];if(pending())parts.push(t('unsavedState'));if(D.doc&&stamp()!==D.stamp)parts.push(t('diffStale'));for(const name of jobs.keys())parts.push(t('busy'+name[0].toUpperCase()+name.slice(1)));$('stateText').textContent=parts.join(' · ');$('status').textContent=S.doc?fmt(S.doc.records.length)+' '+t('nodes'):t('ready');$('filename').textContent=S.doc?S.name:t('noFile');}
+function stamp(){return S.key+':'+D.key+':'+$('numberMode').value+':'+$('signedZero').checked;}
+const workerBody=AppError.toString()+'\nconst LIMITS='+JSON.stringify(LIMITS)+';\n'+parseDocument.toString()+serializeDocument.toString()+normalizeNumber.toString()+compareDocuments.toString()+`
+const cache=new Map();onmessage=e=>{const {id,kind,payload:p}=e.data;try{let result;if(kind==='parse'){const doc=parseDocument(p.text);result=doc;}else if(kind==='format'){const doc=parseDocument(p.text);result=serializeDocument(doc,p.indent);}else{for(const entry of p.documents||[])cache.set(entry.key,parseDocument(entry.text));result=compareDocuments(cache.get(p.a),cache.get(p.b),p.mode,p.zero);for(const key of cache.keys())if(key!==p.a&&key!==p.b)cache.delete(key);}postMessage({id,ok:true,result});}catch(e){postMessage({id,ok:false,error:{key:e.key||'unexpected',args:e.args||{},position:e.position??null,line:e.line??null,column:e.column??null}});}};`;
+const services={};
+function service(name){if(services[name])return services[name];const url=URL.createObjectURL(new Blob([workerBody],{type:'text/javascript'}));let worker;try{worker=new Worker(url);}finally{URL.revokeObjectURL(url);}return services[name]={worker,known:new Set()};}
+function cancel(name){const job=jobs.get(name);if(job)job.cancel();}
+function run(name,kind,payload){cancel(name);return new Promise((resolve,reject)=>{let svc;try{svc=service(name);}catch{reject(new AppError('workerUnavailable'));return;}const id=++sequence;const finish=()=>{jobs.delete(name);$('cancel'+name[0].toUpperCase()+name.slice(1)).hidden=true;state();};const abort=(key='cancelled')=>{svc.worker.terminate();delete services[name];finish();reject(new AppError(key));};jobs.set(name,{cancel:()=>abort()});$('cancel'+name[0].toUpperCase()+name.slice(1)).hidden=false;state();svc.worker.onmessage=e=>{if(e.data.id!==id)return;finish();if(e.data.ok){if(kind==='diff')svc.known=new Set([payload.a,payload.b]);resolve(e.data.result);}else{const x=e.data.error;reject(new AppError(x.key,x.args,x.position,x.line,x.column));}};svc.worker.onerror=e=>{e.preventDefault();abort('workerUnavailable');};svc.worker.onmessageerror=()=>abort('workerUnavailable');try{svc.worker.postMessage({id,kind,payload});}catch{abort('workerUnavailable');}});}
+function clearError(){S.error=null;$('error').hidden=true;}
+function showError(e,text=$('source').value){if(e.key==='cancelled'){notify('cancelled');return;}S.error=e;S.errorSource=text;const line=e.line??1,column=e.column??1;$('errorMessage').textContent=e.localized?e.localized():t('unexpected');const rows=text.split('\n');const row=rows[line-1]||'';const start=Math.max(0,column-1-60),excerpt=row.slice(start,start+160);$('errorContext').textContent=e.position===null?'':`${line} | ${start?'…':''}${excerpt}\n${' '.repeat(String(line).length+3+(start?1:0)+Math.max(0,column-1-start))}^`;$('errorGo').disabled=e.position===null||text!==$('source').value;$('error').hidden=false;}
+function checkBytes(text){if(enc.encode(text).length>LIMITS.bytes)throw new AppError('byteLimit');}
+function view(id){S.tab=id;for(const p of document.querySelectorAll('.panel'))p.classList.toggle('active',p.id===id);for(const b of document.querySelectorAll('.tab')){const on=b.dataset.panel===id;b.setAttribute('aria-selected',String(on));b.tabIndex=on?0:-1;}if(id==='diffPanel')renderDiff();}
+function searchOptions(){return{q:$('search').value,type:$('sType').value,keys:$('sKeys').checked,values:$('sValues').checked,paths:$('sPaths').checked,exact:$('sExact').checked,case:$('sCase').checked};}
+function activeSearch(){const o=searchOptions();return !!o.q||!!o.type;}
+function nodeMatch(d,r){return matchesRecord(d,r,searchOptions());}
+function brief(d,r){return group(r)?`${t(r.type+'Type')}(${fmt(r.children.length)})`:r.type==='string'?JSON.stringify(r.value):d.text.slice(r.start,r.end);}
+function clip(text,n=360){text=String(text);return text.length>n?text.slice(0,n)+'…':text;}
+function mark(host,text,cls=''){text=String(text);const span=el('span',cls),o=searchOptions();if(!o.q){span.textContent=text;host.append(span);return;}const hay=o.case?text:text.toLowerCase(),q=o.case?o.q:o.q.toLowerCase();let p=0,at;while((at=hay.indexOf(q,p))>=0){span.append(document.createTextNode(text.slice(p,at)),el('mark','',text.slice(at,at+q.length)));p=at+q.length;}span.append(document.createTextNode(text.slice(p)));host.append(span);}
+function updateSearch(reset=true){if(reset){S.tp=0;S.rp=0;S.hit=-1;}const active=activeSearch();if(active&&!S.searching)S.searchSaved=new Set(S.expanded);if(!active&&S.searching&&S.searchSaved){S.expanded=S.searchSaved;S.searchSaved=null;}S.searching=active;S.visible=[];S.hits=[];if(S.doc){const keep=new Uint8Array(S.doc.records.length);for(const r of S.doc.records){if(nodeMatch(S.doc,r)){S.hits.push(r.index);if(active)keep[r.index]=1;}}if(active){for(let i=keep.length-1;i>=0;i--)if(keep[i]&&S.doc.records[i].parent!==null)keep[S.doc.records[i].parent]=1;S.visible=S.doc.records.filter(r=>keep[r.index]).map(r=>r.index);}else for(const r of S.doc.records)if(r.parent===null||(keep[r.parent]&&S.expanded.has(r.parent))){keep[r.index]=1;S.visible.push(r.index);}}
+ const o=searchOptions(),chips=[];if(o.type)chips.push(t(o.type+'Type'));if(o.q){if(o.keys)chips.push(t('inKeys'));if(o.values)chips.push(t('inValues'));if(o.paths)chips.push(t('inPaths'));if(o.exact)chips.push(t('exactMatch'));if(o.case)chips.push(t('caseSensitive'));}const host=$('filterChips');host.replaceChildren(...chips.map(x=>el('span','chip',x)));host.hidden=!chips.length;$('matches').textContent=active?(S.hit>=0?`${S.hit+1}/`:'')+fmt(S.hits.length):'';$('hitPrev').disabled=$('hitNext').disabled=!active||!S.hits.length;renderTree();renderTable();renderDiff();}
+function pager(total,size,page,prev,next,label){const count=Math.max(1,Math.ceil(total/size));page=Math.max(0,Math.min(page,count-1));$(prev).disabled=page===0;$(next).disabled=page===count-1;$(label).textContent=`${page+1}/${count} · ${fmt(total)}`;return page;}
+function renderTree(focusId=null){const host=$('tree');host.replaceChildren();S.tp=pager(S.visible.length,LIMITS.treePage,S.tp,'treePrev','treeNext','treePage');if(!S.doc){host.append(el('div','empty',t('empty')));return;}if(!S.visible.length){host.append(el('div','empty',t('noMatches')));return;}const ids=S.visible.slice(S.tp*LIMITS.treePage,(S.tp+1)*LIMITS.treePage);const focus=ids.includes(S.selected)?S.selected:ids[0];for(const id of ids){const r=S.doc.records[id],row=el('div','row'+(id===S.selected?' selected':''));row.dataset.node=id;row.role='treeitem';row.tabIndex=id===focus?0:-1;row.setAttribute('aria-level',r.depth+1);if(r.parent!==null){const siblings=S.doc.records[r.parent].children;row.setAttribute('aria-posinset',r.siblingIndex+1);row.setAttribute('aria-setsize',siblings.length);}row.setAttribute('aria-selected',String(id===S.selected));row.style.paddingLeft=Math.min(r.depth,30)*15+'px';if(group(r))row.setAttribute('aria-expanded',String(activeSearch()||S.expanded.has(id)));row.setAttribute('aria-label',r.path+' '+clip(brief(S.doc,r),100));const tw=el('button','twist',group(r)?(activeSearch()||S.expanded.has(id)?'▾':'▸'):'·');tw.tabIndex=-1;tw.disabled=!group(r)||activeSearch();tw.setAttribute('aria-label',t('toggle',{key:r.key}));tw.onclick=e=>{e.stopPropagation();S.expanded.has(id)?S.expanded.delete(id):S.expanded.add(id);updateSearch(false);focusTree(id);};const text=el('span','clip');mark(text,clip(r.key),'key');text.append(document.createTextNode(': '));mark(text,clip(brief(S.doc,r)),group(r)?'muted':r.type);row.onclick=()=>select(id,true);row.onkeydown=e=>treeKey(e,id);const jump=el('button','jump','↗');jump.tabIndex=-1;jump.setAttribute('aria-label',t('openTable'));jump.onclick=e=>{e.stopPropagation();S.root=group(r)?id:r.parent??id;S.rp=0;$('node').value=S.root;renderTable();view('tablePanel');};row.append(tw,text,jump);host.append(row);}if(focusId!==null)focusTree(focusId);}
+function focusTree(id){$('tree').querySelector(`[data-node="${id}"]`)?.focus();}
+function treeKey(e,id){const r=S.doc.records[id],at=S.visible.indexOf(id);let next=null;if(e.key==='ArrowDown')next=S.visible[Math.min(at+1,S.visible.length-1)];else if(e.key==='ArrowUp')next=S.visible[Math.max(0,at-1)];else if(e.key==='Home')next=S.visible[0];else if(e.key==='End')next=S.visible.at(-1);else if(e.key==='ArrowRight'){if(group(r)&&!activeSearch()&&!S.expanded.has(id)){S.expanded.add(id);updateSearch(false);focusTree(id);}else next=r.children[0];}else if(e.key==='ArrowLeft'){if(group(r)&&S.expanded.has(id)&&!activeSearch()){S.expanded.delete(id);updateSearch(false);focusTree(id);}else next=r.parent;}else if(e.key==='Enter'||e.key===' '){select(id,true);}else return;e.preventDefault();if(next!==null&&next!==undefined){S.selected=next;S.tp=Math.floor(S.visible.indexOf(next)/LIMITS.treePage);renderTree(next);renderInspector();}}
+function select(id,open=false){S.selected=id;renderTree(id);renderInspector();if(open)$('inspector').hidden=false;}
+function reveal(id){if(activeSearch())resetSearch();let p=S.doc.records[id].parent;while(p!==null){S.expanded.add(p);p=S.doc.records[p].parent;}updateSearch(false);S.selected=id;S.tp=Math.floor(S.visible.indexOf(id)/LIMITS.treePage);view('treePanel');renderTree(id);renderInspector();$('inspector').hidden=false;}
+function renderInspector(){if(!S.doc)return;const r=S.doc.records[S.selected];$('inspectPath').textContent=r.path;const loc=lineLocation(S.doc.lines,r.start);$('inspectMeta').textContent=t('inspectMeta',{type:t(r.type+'Type'),depth:r.depth,count:r.children.length})+` · ${loc.line}:${loc.column}`;const value=S.doc.text.slice(r.start,r.end);$('inspectValue').textContent=value.length>100000?value.slice(0,100000)+'\n'+t('truncated'):value;$('parentNode').disabled=r.parent===null;const ids=[];let p=r;while(p){ids.unshift(p.index);p=p.parent===null?null:S.doc.records[p.parent];}const bc=$('breadcrumbs');bc.replaceChildren();for(const id of ids){const n=S.doc.records[id],b=el('button','',clip(n.parent===null?'$':n.key,50));b.title=n.path;b.onclick=()=>reveal(id);bc.append(b,el('span','muted','›'));}}
+function hasSubtreeMatch(r){if(!activeSearch())return true;for(let i=r.index;i<=r.last;i++)if(nodeMatch(S.doc,S.doc.records[i]))return true;return false;}
+function renderTable(){const host=$('table');host.replaceChildren();if(!S.doc)return;const rs=S.doc.records,root=rs[S.root],rows=[],cols=[];if($('mode').value==='paths'){cols.push(t('path'),t('colType'),t('colValue'));for(let i=root.index;i<=root.last;i++){const r=rs[i];if((!group(r)||!r.children.length)&&nodeMatch(S.doc,r))rows.push([r.path,t(r.type+'Type'),{id:i}]);}}
+ else if(root.type==='array'&&root.children.length&&root.children.every(id=>rs[id].type==='object')){const keys=[...new Set(root.children.flatMap(id=>rs[id].children.map(cid=>rs[cid].key)))];const shown=keys.slice(0,LIMITS.columns);cols.push('#',...shown);root.children.forEach((id,i)=>{if(hasSubtreeMatch(rs[id]))rows.push([i,...shown.map(k=>rs[id].lookup.has(k)?{id:rs[id].lookup.get(k)}:'—')]);});if(keys.length>shown.length)host.append(el('div','empty',t('columnLimit',{shown:shown.length,total:keys.length})));}
+ else{cols.push(t('colKey'),t('colType'),t('colValue'));for(const id of group(root)?root.children:[root.index])if(hasSubtreeMatch(rs[id]))rows.push([rs[id].key,t(rs[id].type+'Type'),{id}]);}
+ S.rp=pager(rows.length,LIMITS.tablePage,S.rp,'tablePrev','tableNext','tablePage');$('tableInfo').textContent=t('rowCount',{count:fmt(rows.length)});if(!rows.length){host.append(el('div','empty',t('noRows')));return;}const table=el('table'),thead=el('thead'),tr=el('tr');cols.forEach(x=>tr.append(el('th','',x)));thead.append(tr);table.append(thead);const tbody=el('tbody');for(const cells of rows.slice(S.rp*LIMITS.tablePage,(S.rp+1)*LIMITS.tablePage)){const row=el('tr');for(const c of cells){const td=el('td');if(c&&typeof c==='object'){const r=rs[c.id],b=el('button','cell');mark(b,clip(brief(S.doc,r),600),r.type);b.onclick=()=>select(c.id,true);td.append(b);if(group(r)){const j=el('button','jump','↗');j.setAttribute('aria-label',t('openContainer'));j.onclick=()=>{S.root=c.id;$('node').value=c.id;S.rp=0;renderTable();};td.append(j);}}else mark(td,clip(c,600));row.append(td);}tbody.append(row);}table.append(tbody);host.append(table);}
+function stats(){if(!S.doc)return;const d=S.doc;if(!d.stats){const c={nodes:d.records.length,keys:0,objects:0,arrays:0,strings:0,numbers:0,depth:0};for(const r of d.records){const k={object:'objects',array:'arrays',string:'strings',number:'numbers'}[r.type];if(k)c[k]++;if(r.type==='object')c.keys+=r.children.length;c.depth=Math.max(c.depth,r.depth);}d.stats=c;d.bytes=enc.encode(d.text).length;}for(const[k,v]of Object.entries(d.stats))$(k).textContent=fmt(v);$('bytes').textContent=fmt(d.bytes)+' B';}
+function selector(){const frag=document.createDocumentFragment();for(const r of S.doc.records)if(group(r)||!r.index){const o=el('option','',clip(r.path,160));o.value=r.index;frag.append(o);}$('node').replaceChildren(frag);$('node').value=S.root;}
+function renderWarnings(){const box=$('warningsBox'),list=$('warningsList');list.replaceChildren();const entries=[];for(const [d,side]of [[S.doc,'primary'],[D.doc,'comparison']])if(d)for(const w of d.warnings)entries.push({d,side,w});box.hidden=!entries.length;$('warningsTitle').textContent=t('warnings',{count:entries.length});for(const {d,side,w}of entries.slice(0,100)){const loc=lineLocation(d.lines,w.position),b=el('button','',t(side)+' · '+t('warningAt',{...loc,offset:w.offset}));b.onclick=()=>{if(d===S.doc&&$('source').value===d.text)goEditor(w.position);else{const r=d.records.find(r=>r.start===w.position);notify('warningAt',{...loc,offset:w.offset});if(r&&d===S.doc)reveal(r.index);}};list.append(b);}if(entries.length>100)list.append(el('div','muted','… '+(entries.length-100)));}
+function goEditor(pos){view('sourcePanel');$('source').focus();$('source').setSelectionRange(pos,pos);const line=$('source').value.slice(0,pos).split('\n').length;$('source').scrollTop=Math.max(0,(line-4)*21);sync();cursor();}
+function renderAll(){stats();selector();updateSearch();renderInspector();renderWarnings();state();}
+function commit(doc,name,exported=null){const old=S.doc,selected=old?.records[S.selected]?.path,root=old?.records[S.root]?.path;S.doc=doc;S.name=name;S.key++;S.selected=doc.byPath.get(selected)??0;S.root=doc.byPath.get(root)??0;if(!group(doc.records[S.root]))S.root=0;S.expanded=new Set(doc.records.filter(r=>r.depth<2&&group(r)).map(r=>r.index));S.searchSaved=null;S.searching=false;if(exported!==null)S.exported=exported;clearError();if(!S.pinned)$('inspector').hidden=true;renderAll();}
+async function apply(){const text=$('source').value,revision=S.revision;try{checkBytes(text);const doc=await run('parse','parse',{text});if(revision!==S.revision)throw new AppError('stale');commit(doc,S.name);return true;}catch(e){showError(e,text);return false;}}
+async function openFile(file,side='primary'){if(!file)return;const other=side==='comparison',token=other?++D.load:++S.load,revision=S.revision;if(!other&&pending()&&!confirm(t('replace')))return;try{if(file.size>LIMITS.bytes)throw new AppError('fileLimit');const text=(await file.text()).replace(/^\uFEFF/,'');if(token!==(other?D.load:S.load))return;const doc=await run('parse','parse',{text});if(token!==(other?D.load:S.load))return;if(!other&&revision!==S.revision&&!confirm(t('changedWhileReading')))return;if(other){D.doc=doc;D.name=file.name;D.key++;D.open.clear();renderWarnings();await refreshDiff();view('diffPanel');}else{S.revision++;$('source').value=text;commit(doc,file.name,text);highlight();view('treePanel');}}catch(e){showError(e,'');}}
+async function format(indent){const text=$('source').value,revision=S.revision;try{checkBytes(text);const result=await run('format','format',{text,indent});checkBytes(result);if(revision!==S.revision)throw new AppError('stale');$('source').value=result;changed();highlight();}catch(e){showError(e,text);}}
+function changed(){S.revision++;clearError();state();clearTimeout(editTimer);editTimer=setTimeout(highlight,180);}
+function sync(){$('gutter').scrollTop=$('source').scrollTop;$('highlight').scrollTop=$('source').scrollTop;$('highlight').scrollLeft=$('source').scrollLeft;}
+function cursor(){const text=$('source').value;if(text.length>LIMITS.highlight){$('cursor').textContent='';return;}const p=$('source').selectionStart,b=text.slice(0,p);$('cursor').textContent=`${b.split('\n').length}:${p-b.lastIndexOf('\n')}`;}
+function highlight(){const text=$('source').value,host=$('highlight');host.replaceChildren();cursor();if(text.length>LIMITS.highlight){$('gutter').textContent='—';host.textContent=t('largePreview');return;}$('gutter').textContent=Array.from({length:text.split('\n').length},(_,i)=>i+1).join('\n');const re=/"(?:\\[\s\S]|[^"\\])*"|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?|\btrue\b|\bfalse\b|\bnull\b/g;const frag=document.createDocumentFragment();let last=0;for(const m of text.matchAll(re)){frag.append(document.createTextNode(text.slice(last,m.index)));const token=m[0],cls=token[0]==='"'?(/^\s*:/.test(text.slice(m.index+token.length))?'key':'string'):token==='null'?'null':token==='true'||token==='false'?'boolean':'number';frag.append(el('span',cls,token));last=m.index+token.length;}frag.append(document.createTextNode(text.slice(last)));host.append(frag);sync();}
+async function copy(text){const previous=document.activeElement;try{await navigator.clipboard.writeText(text);notify('copied');}catch{const ta=el('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.append(ta);ta.select();let ok=false;try{ok=document.execCommand('copy');}catch{}ta.remove();previous?.focus();notify(ok?'copied':'copyFailed');}}
+function download(text,name,type='application/json'){const url=URL.createObjectURL(new Blob([text],{type:type+';charset=utf-8'})),a=el('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);}
+async function refreshDiff(){if(!S.doc||!D.doc){renderDiff();return;}cancel('diff');const version=stamp(),a=S.doc,b=D.doc,ak='a'+S.key,bk='b'+D.key;try{const known=services.diff?.known||new Set(),documents=[];if(!known.has(ak))documents.push({key:ak,text:a.text});if(!known.has(bk))documents.push({key:bk,text:b.text});const rows=await run('diff','diff',{documents,a:ak,b:bk,mode:$('numberMode').value,zero:$('signedZero').checked});if(version!==stamp())return;D.rows=rows;D.stamp=version;D.page=0;D.selected=null;D.open.clear();clearError();renderDiff();state();}catch(e){showError(e,'');}}
+function filteredDiff(){return D.rows.filter(r=>(!$('onlyDiff').checked||r.state!=='unchanged')&&(!$('diffFilter').value||r.state===$('diffFilter').value)&&(!activeSearch()||[ [S.doc,r.ai],[D.doc,r.bi] ].some(([d,id])=>d&&id!==undefined&&nodeMatch(d,d.records[id]))));}
+function renderDiff(){const host=$('diffBody');host.replaceChildren();$('diffNames').textContent=S.doc&&D.doc?`${t('primary')}: ${S.name} → ${t('comparison')}: ${D.name}`:'';const fresh=D.stamp===stamp();$('exportDiff').disabled=!fresh||!D.rows.length;$('swapDocs').disabled=!S.doc||!D.doc;$('recompare').disabled=!S.doc||!D.doc;
+ if(!S.doc||!D.doc||!fresh){host.append(el('div','empty',t(S.doc&&D.doc?'diffStale':'diffEmpty')));$('diffSummary').textContent='';$('diffPrev').disabled=$('diffNext').disabled=$('nextChange').disabled=$('prevChange').disabled=true;$('diffPage').textContent='';return;}
+ const counts={added:0,removed:0,modified:0,unchanged:0};D.rows.forEach(r=>counts[r.state]++);$('diffSummary').textContent=Object.entries(counts).map(([k,v])=>t(k)+': '+fmt(v)).join(' · ');const rows=filteredDiff();D.page=pager(rows.length,LIMITS.tablePage,D.page,'diffPrev','diffNext','diffPage');$('nextChange').disabled=$('prevChange').disabled=!rows.some(r=>r.state!=='unchanged');if(!rows.length){host.append(el('div','empty',t('noResults')));return;}
+ const table=el('table'),thead=el('thead'),head=el('tr');for(const k of ['path','diffFilter','primary','comparison'])head.append(el('th','',t(k)));thead.append(head);table.append(thead);const body=el('tbody');for(const row of rows.slice(D.page*LIMITS.tablePage,(D.page+1)*LIMITS.tablePage)){const tr=el('tr','diff-'+row.state+(D.selected===row.path?' selected':''));tr.dataset.diffPath=row.path;tr.tabIndex=0;const td=el('td'),open=el('button','cell',clip(row.path,220));open.title=t('expandDiff');open.onclick=()=>{D.open.has(row.path)?D.open.delete(row.path):D.open.add(row.path);D.selected=row.path;renderDiff();};td.append(open);const status=el('td','',t(row.state));if(row.inside)status.append(el('div','muted',t('inside')));tr.append(td,status);for(const[d,id,side]of [[S.doc,row.ai,'primary'],[D.doc,row.bi,'comparison']]){const cell=el('td');if(id!==undefined){const r=d.records[id],b=el('button','cell',clip(brief(d,r),400));b.title=t('copySide');b.onclick=()=>copy(d.text.slice(r.start,r.end));cell.append(b);if(side==='primary'){const go=el('button','jump','↗');go.setAttribute('aria-label',t('go'));go.onclick=()=>reveal(id);cell.append(go);}}else cell.textContent='—';tr.append(cell);}tr.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();open.click();}};body.append(tr);if(D.open.has(row.path)){const detail=el('tr'),cell=el('td');cell.colSpan=4;const wrap=el('div','diffDetails');for(const[d,id,side]of [[S.doc,row.ai,'primary'],[D.doc,row.bi,'comparison']]){const box=el('div');box.append(el('div','muted',t(side)));const value=id===undefined?'—':d.text.slice(d.records[id].start,d.records[id].end);box.append(el('pre','',clip(value,100000)));wrap.append(box);}cell.append(wrap);const descendants=D.rows.filter(r=>r.path!==row.path&&(r.path.startsWith(row.path+'[')));for(const child of descendants.slice(0,100)){const b=el('button','cell',clip(child.path,200)+' · '+t(child.state));b.style.display='block';b.onclick=()=>{D.open.add(child.path);D.selected=child.path;const i=filteredDiff().findIndex(x=>x.path===child.path);if(i>=0)D.page=Math.floor(i/LIMITS.tablePage);renderDiff();};cell.append(b);}detail.append(cell);body.append(detail);}}
+ table.append(body);host.append(table);host.append(el('div','empty',t('reportNote')));}
+function moveChange(delta){const rows=filteredDiff(),changes=rows.filter(r=>r.state!=='unchanged');if(!changes.length)return;let i=changes.findIndex(r=>r.path===D.selected);i=i<0?(delta>0?0:changes.length-1):(i+delta+changes.length)%changes.length;D.selected=changes[i].path;D.page=Math.floor(rows.indexOf(changes[i])/LIMITS.tablePage);renderDiff();const e=[...$('diffBody').querySelectorAll('[data-diff-path]')].find(e=>e.dataset.diffPath===D.selected);e?.focus();e?.scrollIntoView({block:'nearest'});}
+function resetSearch(){clearTimeout(searchTimer);$('search').value='';$('sType').value='';$('sKeys').checked=$('sValues').checked=$('sPaths').checked=true;$('sExact').checked=$('sCase').checked=false;updateSearch();}
+function nextHit(delta){if(!S.hits.length)return;S.hit=S.hit<0?(delta>0?0:S.hits.length-1):(S.hit+delta+S.hits.length)%S.hits.length;const id=S.hits[S.hit];S.selected=id;S.tp=Math.floor(S.visible.indexOf(id)/LIMITS.treePage);view('treePanel');renderTree(id);renderInspector();$('inspector').hidden=false;$('matches').textContent=`${S.hit+1}/${S.hits.length}`;}
+function translate(){document.documentElement.lang=lang;for(const e of document.querySelectorAll('[data-i18n]'))e.textContent=t(e.dataset.i18n);for(const e of document.querySelectorAll('[data-placeholder]'))e.placeholder=t(e.dataset.placeholder);for(const e of document.querySelectorAll('[data-aria]'))e.setAttribute('aria-label',t(e.dataset.aria));$('language').textContent=lang==='ru'?'EN':'RU';$('language').setAttribute('aria-label',t('switchLanguage'));stats();if(S.doc)selector();updateSearch(false);renderInspector();renderWarnings();highlight();state();if(S.error)showError(S.error,S.errorSource);}
+$('language').onclick=()=>{lang=lang==='ru'?'en':'ru';translate();};$('focusMode').onclick=()=>document.body.classList.add('focus-mode');$('focusExit').onclick=()=>document.body.classList.remove('focus-mode');$('toggleStats').onclick=()=>{document.querySelector('.stats').hidden=!document.querySelector('.stats').hidden;};
+$('pinInspector').onclick=()=>{S.pinned=!S.pinned;$('pinInspector').setAttribute('aria-pressed',String(S.pinned));};$('closeInspector').onclick=()=>{$('inspector').hidden=true;focusTree(S.selected);};$('parentNode').onclick=()=>{if(S.doc){const p=S.doc.records[S.selected].parent;if(p!==null)reveal(p);}};$('inspectPathCopy').onclick=$('copyPath').onclick=()=>S.doc?copy(S.doc.records[S.selected].path):notify('openFirst');$('copyValue').onclick=()=>{if(S.doc){const r=S.doc.records[S.selected];copy(S.doc.text.slice(r.start,r.end));}};
+$('open').onclick=()=>$('file').click();$('file').onchange=e=>{const f=e.target.files[0];e.target.value='';openFile(f);};$('compareFile').onclick=()=>{if(!S.doc){notify('openFirst');return;}$('file2').click();};$('file2').onchange=e=>{const f=e.target.files[0];e.target.value='';openFile(f,'comparison');};
+$('sample').onclick=async()=>{if(pending()&&!confirm(t('replace')))return;S.load++;cancel('parse');const text='{"project":"JSON Inspector","version":"4.2","users":[{"id":9007199254740993,"name":"Anna","active":true},{"id":2,"name":"Nino","active":false}],"a.b":{"hello world":"Unicode: თბილისი"},"empty":[],"null":null,"decimal":0.123456789012345678901,"negativeZero":-0,"exponent":1e999}';const revision=++S.revision;try{const doc=await run('parse','parse',{text});if(revision!==S.revision)throw new AppError('stale');$('source').value=text;commit(doc,'example.json','');highlight();view('treePanel');}catch(e){showError(e,text);}};
+$('apply').onclick=apply;$('format').onclick=()=>format(2);$('minify').onclick=()=>format(0);$('copyAll').onclick=()=>copy($('source').value);$('download').onclick=async()=>{if(!await apply()){view('sourcePanel');return;}const text=S.doc.text;download(text,(S.name.replace(/\.[^.]+$/,'')||'document')+'.json');S.exported=text;state();notify('exportToast');};
+$('source').oninput=changed;$('source').onscroll=sync;$('source').onkeyup=cursor;$('source').onclick=cursor;$('source').onkeydown=e=>{if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){e.preventDefault();apply();}else if(e.key==='Tab'){e.preventDefault();e.target.setRangeText('  ',e.target.selectionStart,e.target.selectionEnd,'end');changed();}};
+$('search').oninput=()=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>updateSearch(),180);};for(const id of ['sKeys','sValues','sPaths','sType','sExact','sCase'])$(id).onchange=()=>updateSearch();$('clearSearch').onclick=resetSearch;$('hitPrev').onclick=()=>nextHit(-1);$('hitNext').onclick=()=>nextHit(1);$('expand').onclick=()=>{if(S.doc){S.expanded=new Set(S.doc.records.filter(group).map(r=>r.index));updateSearch(false);}};$('collapse').onclick=()=>{S.expanded.clear();updateSearch(false);};
+$('treePrev').onclick=()=>{S.tp--;renderTree();};$('treeNext').onclick=()=>{S.tp++;renderTree();};$('tablePrev').onclick=()=>{S.rp--;renderTable();};$('tableNext').onclick=()=>{S.rp++;renderTable();};$('mode').onchange=()=>{S.rp=0;renderTable();};$('node').onchange=e=>{S.root=Number(e.target.value);S.rp=0;renderTable();};$('go').onclick=()=>{if(!S.doc)return;const id=resolvePath(S.doc,$('path').value.trim());id===null?notify('notFound'):reveal(id);};$('path').onkeydown=e=>{if(e.key==='Enter')$('go').click();};
+$('errorGo').onclick=()=>{if(S.error&&S.errorSource===$('source').value)goEditor(S.error.position??0);};
+$('recompare').onclick=refreshDiff;$('numberMode').onchange=$('signedZero').onchange=()=>{state();renderDiff();};$('diffFilter').onchange=$('onlyDiff').onchange=()=>{D.page=0;renderDiff();};$('diffPrev').onclick=()=>{D.page--;renderDiff();};$('diffNext').onclick=()=>{D.page++;renderDiff();};$('prevChange').onclick=()=>moveChange(-1);$('nextChange').onclick=()=>moveChange(1);
+$('swapDocs').onclick=()=>{if(!S.doc||!D.doc)return;if(pending()&&!confirm(t('replace')))return;cancel('diff');cancel('parse');cancel('format');S.load++;D.load++;const doc=S.doc,name=S.name;const right=D.doc,rightName=D.name;D.doc=doc;D.name=name;D.key++;$('source').value=right.text;S.revision++;commit(right,rightName,right.text);highlight();refreshDiff();};
+$('exportDiff').onclick=()=>{if(D.stamp!==stamp())return;if(draft()&&!confirm(t('changedWhileOperation')))return;const report={application:'JSON Inspector 4.2',primary:S.name,comparison:D.name,numberMode:$('numberMode').value,signedZero:$('signedZero').checked,arrayMatching:'index',sourceOffsetUnit:'UTF-16',sources:{primary:S.doc.text,comparison:D.doc.text},counts:D.rows.reduce((o,r)=>(o[r.state]=(o[r.state]||0)+1,o),{}),rows:D.rows.map(r=>({path:r.path,status:r.state,ownStatus:r.own,changedDescendants:r.inside,primary:r.ai===undefined?null:{type:S.doc.records[r.ai].type,start:S.doc.records[r.ai].start,end:S.doc.records[r.ai].end},comparison:r.bi===undefined?null:{type:D.doc.records[r.bi].type,start:D.doc.records[r.bi].start,end:D.doc.records[r.bi].end}}))};download(JSON.stringify(report,null,2),'json-diff-report.json');};
+for(const name of ['parse','format','diff'])$('cancel'+name[0].toUpperCase()+name.slice(1)).onclick=()=>cancel(name);
+const tabs=[...document.querySelectorAll('.tab')];tabs.forEach((b,i)=>{b.onclick=()=>view(b.dataset.panel);b.onkeydown=e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const j=e.key==='Home'?0:e.key==='End'?tabs.length-1:(i+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;tabs[j].focus();view(tabs[j].dataset.panel);};});
+let drag=0;const hasFiles=e=>Array.from(e.dataTransfer?.types||[]).includes('Files');window.addEventListener('dragenter',e=>{if(hasFiles(e)){e.preventDefault();drag++;$('overlay').style.display='grid';}});window.addEventListener('dragover',e=>{if(hasFiles(e))e.preventDefault();});window.addEventListener('dragleave',e=>{if(hasFiles(e)&&--drag<=0){drag=0;$('overlay').style.display='none';}});window.addEventListener('drop',e=>{if(!hasFiles(e))return;e.preventDefault();drag=0;$('overlay').style.display='none';openFile(e.dataTransfer.files[0]);});window.addEventListener('keydown',e=>{if(e.key==='Escape'){$('inspector').hidden=true;document.body.classList.remove('focus-mode');}});window.addEventListener('beforeunload',e=>{if(pending()){e.preventDefault();e.returnValue='';}});
+view('treePanel');translate();renderDiff();
+
+</script></body></html>
