@@ -1,6 +1,6 @@
-# JSON Inspector 4.2
+# JSON Inspector 4.3 · Graphite Studio
 
-![Version](https://img.shields.io/badge/version-4.2-548af7?style=flat-square)
+![Version](https://img.shields.io/badge/version-4.3-548af7?style=flat-square)
 ![HTML](https://img.shields.io/badge/HTML-single_file-e34f26?style=flat-square)
 ![CSS](https://img.shields.io/badge/CSS-custom_styles-1572b6?style=flat-square)
 ![JavaScript](https://img.shields.io/badge/JavaScript-vanilla-f7df1e?style=flat-square)
@@ -11,7 +11,7 @@
 
 [English](README.md) · [Русский](README.ru.md)
 
-A compact, local-first JSON inspector in one HTML file. Explore trees and tables, edit source, inspect exact values, and compare documents without installation, external libraries, or a server.
+A local-first JSON inspector in one HTML file, with the Graphite Studio interface. Explore trees and tables, edit source, inspect exact values, and compare documents without installation, external libraries, or a server.
 
 Built with HTML, CSS, and vanilla JavaScript. Web Workers handle parsing, formatting, and comparison. Python and Node.js are not part of the application and are not required to run it.
 
@@ -19,7 +19,7 @@ The dark palette is inspired by developer tools such as IntelliJ IDEA. This is a
 
 ## Quick start
 
-1. Save `JSON-Inspector-4.2.html` to your computer.
+1. Save `JSON-Inspector-4.3-Graphite.html` to your computer.
 2. Open it in a modern browser.
 3. Click Open, drop a JSON file into the window, or paste JSON into JSON Source and click Apply.
 4. Use Sample to explore the built-in document.
@@ -29,18 +29,22 @@ No build step, package manager, or local web server is needed. The application r
 
 Background tasks require Blob-based Web Workers. If the browser blocks Worker startup, an error is displayed; there is no silent fallback to synchronous parsing.
 
-## What's new in 4.2
+## What's new in 4.3
 
-- Explicit applied-document, draft, export-request, and stale-comparison states.
-- Independently cancellable parsing, formatting, and comparison tasks.
-- Revision checks to prevent background results from overwriting newer edits.
-- Cached comparison inputs for repeated comparisons.
-- Diff side swapping, refresh, change navigation, expandable values, and report export.
-- Separate node-change and descendant-change information.
-- Keyboard tree navigation and clickable ancestor breadcrumbs.
-- Pinnable, horizontally resizable inspector.
-- Collapsible search options, active-filter labels, hideable statistics, and a data-focus mode.
-- Error excerpts with editor navigation and a Unicode-warning list.
+Graphite Studio redesigns the workspace while retaining the 4.2 computational core: parsing, numeric-token preservation, exact comparison, and document limits remain unchanged.
+
+- Lighter graphite surfaces, larger controls and text, softer corners, and more spacing.
+- A centered welcome screen with file opening, a sample, and an editor shortcut.
+- Search beside the view tabs, collapsible options, and removable active-filter buttons.
+- A docked right-hand inspector that does not overlap the document on desktop.
+- A mouse- and keyboard-adjustable inspector divider; a bottom-sheet inspector on narrow screens.
+- Comfortable spacing by default, with a Compact / Comfortable density toggle.
+- A document-state badge alongside the detailed state text.
+- Statistics moved below the workspace.
+- Inline SVG icons without icon libraries or external assets.
+- Reduced-motion styling that disables interface transitions when requested by the browser setting.
+
+Background processing, cancellable tasks, draft protection, Diff, reports, error navigation, and English/Russian switching remain available.
 
 ## Features
 
@@ -56,7 +60,7 @@ Background tasks require Blob-based Web Workers. If the browser blocks Worker st
 | Numbers | Original tokens preserved; exact decimal-value or token comparison |
 | Unicode | Unpaired-surrogate warnings without silent repairs |
 | Export | Copy source/path/subtree and download JSON without editing the input file in place |
-| Interface | English/Russian controls and diagnostics; compact dark layout |
+| Interface | Graphite Studio; English/Russian controls and diagnostics; comfortable and compact density |
 
 ## Working with documents
 
@@ -82,7 +86,7 @@ Click a tree value to inspect it. Use ↗ to open a container, or a value's pare
 
 Records combines object properties into columns. Missing properties appear as `—`; JSON null remains a value. Paths lists leaves and empty containers below the selected table root.
 
-The inspector supports Parent, Copy Path, Copy Subtree, pinning, and horizontal resizing. Long previews are truncated; copying uses the complete original fragment. Breadcrumb buttons navigate to ancestors.
+The inspector supports Parent, Copy Path, Copy Subtree, and pinning. On desktop it is docked to the right; drag the divider or focus it and use the keyboard to change its width. On narrow screens it opens as a bottom sheet that can overlap the lower part of the workspace; close it to restore the unobstructed view. Long previews are truncated; copying uses the complete original fragment. Breadcrumb buttons navigate to ancestors. Pinning keeps the inspector open when applying a document; Close and Esc can still dismiss it.
 
 Internal node relationships use numeric indices, not display paths.
 
@@ -94,7 +98,7 @@ Exact match compares an entire individual search field. Case sensitive preserves
 
 Strings are searched decoded, numbers by original token, booleans/null by JSON text. Object/array value search uses the type name rather than serialized contents.
 
-Use ↑ / ↓ beside the search field to move between matches. Reset search clears the query and options. Search runs in the main thread with a short input delay.
+Use ↑ / ↓ beside the search field to move between matches. Expand Search options to change the search scope and matching rules. Click an active-filter button marked × to disable that option. Reset search clears the query and options. Search runs in the main thread with a short input delay.
 
 Supported paths:
 
@@ -200,9 +204,18 @@ Search, source highlighting, selectors, model transfer, report preparation, and 
 | Enter / Space in tree | Open selected node's inspector |
 | Left / Right on view tab | Switch tabs |
 | Home / End on view tab | First / last tab |
+| Left / Right on the inspector divider | Widen / narrow the inspector by 10 px, within available space |
+| Shift + Left / Right on the divider | Adjust inspector width by 40 px |
+| Home / End on the divider | Minimum / maximum allowed inspector width |
 | Esc | Close inspector and exit data-focus mode |
 
-Search options and statistics can be collapsed or hidden. Data focus hides secondary panels; Show panels restores them.
+Search options can be collapsed; the Statistics button toggles the strip below the workspace. Data focus hides secondary panels; Show panels restores them.
+
+Comfortable density is the default. Click Compact to reduce spacing, then Comfortable to restore it. Density and manual inspector sizing are not persisted across page reloads.
+
+The inspector divider is available in the desktop layout. On narrow screens the inspector becomes a bottom sheet without a horizontal resize handle. At viewport widths of 1250 px or less, the separate highlighted-source preview is hidden to prioritize the editor; this does not alter the JSON or disable editing.
+
+The interface has a minimum layout width of 360 px. Responsive styling is not a claim of complete mobile usability. It uses modern CSS features including `:has()` and dynamic viewport units.
 
 Clipboard behavior depends on browser permissions. If copying fails, select source text and use your normal copy shortcut.
 
@@ -243,21 +256,25 @@ Click EN or RU to switch to the indicated language. The initial language follows
 
 ## Validation
 
-During development, version 4.2 passed:
+Recorded development checks for the 4.3 Graphite Studio build include:
 
-- 161 computational-core checks using functions extracted from the generated HTML.
-- 30 automated browser checks in headless Chromium, including local-file Worker startup under CSP, draft retention, formatting, Diff, keyboard behavior, cancellation, pagination, and actual JSON/report downloads.
-- JavaScript syntax, DOM-identifier, and translation-key checks.
+- 122 computational-core checks using functions extracted from the generated HTML.
+- Verification that the computational-core block remained unchanged from the supplied 4.2 build.
+- JavaScript syntax checks and checks for missing or duplicate DOM IDs.
+- Browser scenarios in headless Chromium covering the welcome screen, draft retention, formatting, language switching, removable filters, docked inspection, keyboard resizing, density switching, tree navigation, Diff, report download, side swapping, error navigation, and data-focus mode.
+- Layout inspection at several viewport sizes and a separate check of the mobile inspector sheet with a valid applied document.
 
-No Node.js command or separate test file is required to use the application. These are development results, not a guarantee for modified copies.
+The 161 core checks and 30 browser checks previously documented for 4.2 are historical results for that build, not counts for 4.3.
 
-This is not comprehensive cross-browser or accessibility certification. Other browsers, screen readers, system clipboard integration, drag-and-drop behavior, and visual usability still need further manual testing. The narrow-viewport check does not constitute a full mobile usability audit.
+No Node.js command or separate test file is required to use the application. These are recorded development results, not a guarantee for modified copies.
+
+This is not comprehensive cross-browser or accessibility certification. Other browsers, screen readers, system clipboard integration, drag-and-drop, and visual usability still need further manual testing. Narrow-screen behavior, particularly with diagnostics and the inspector open together, needs additional usability review.
 
 ## Repository files
 
 ```text
 .
-├── JSON-Inspector-4.2.html
+├── JSON-Inspector-4.3-Graphite.html
 ├── README.md
 ├── README.ru.md
 └── LICENSE
